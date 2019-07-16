@@ -18,8 +18,7 @@ gulp.task('build-doc', (cb) => {
     task.opts = {
         config: require('./jsdoc.json'),
         src: [
-            path.join(__dirname, 'src/client/js/**/*.js'), 
-            path.join(__dirname, 'src/server/js/**/*.js')
+            path.join(__dirname, 'src/client/js/**/*.js')
         ],
         dest: path.join(__dirname, 'dist/doc/')
     };
@@ -69,34 +68,6 @@ gulp.task('bundle-js', () => {
         src: path.join(__dirname, 'src/client/js/**/*.js'),
         dest: path.join(__dirname, 'dist/client/js/'),
         bundle: path.join(__dirname, 'dist/client/js/bundle.min.js')
-    };
-    return task.task();
-});
-
-gulp.task('merge-sql-scripts', () => {
-    let task = new GulpFileMerge();
-    let sDate = '2019-04-26';
-    let rootPath = path.join(__dirname, 'src/server/db/scripts/' + sDate);
-    task.opts = {
-        src: [
-            /* Concat all *.sql file in subdirectories. */
-            path.join(rootPath, '/**/*.sql'),
-            /* Ignore all *.sql in 99.test.scripts path */
-            '!' + path.join(rootPath, '/99.test.scripts/*.sql'),
-            /* Ignore all *.sql in root path */
-            '!' + path.join(rootPath, '/*.sql')
-        ],
-        header: `/*********** Script Update Date: ` + sDate + `  ***********/\n`,
-        dest: path.join(__dirname, 'dist/server/db/scripts/'),
-        target: 'update-' + sDate + '.sql'
-    };
-    return task.task();
-});
-
-gulp.task('livereload', () => {
-    let task = new GulpLiveReloaded();
-    task.opts = {
-        src: ['dist/client/css/*.css', 'dist/client/js/*.js']
     };
     return task.task();
 });
