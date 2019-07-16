@@ -1,4 +1,4 @@
-# NLib Javascript Library v2.0
+# NLib Javascript Library (Client) v2.0
 
-The NLib javascript library
+The NLib javascript library (Client)
 
