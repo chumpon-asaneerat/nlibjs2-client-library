@@ -71,23 +71,3 @@ gulp.task('bundle-js', () => {
     };
     return task.task();
 });
-
-gulp.task('watch', function() {
-    gulp.watch(src.sass, ['compile-sass']);
-    gulp.watch(src.js, ['bundle-js']);
-    //gulp.watch(src.html, ['html']);
-    //gulp.watch(src.riotTags, ['riot-tags']);
-});
-
-gulp.task('monitor', function(done) {    
-    let task = new GulpNodeMonitor();
-    task.opts = {
-        script: 'server.js',
-        ext: 'js html',
-        env: { 'NODE_ENV': 'development' },
-        done: done
-    };
-    task.task(done);
-});
-
-//gulp.task('default', ['sass', 'server', 'watch', 'livereload', 'js', 'riot-tags']);
