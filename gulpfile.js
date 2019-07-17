@@ -5,13 +5,7 @@ const GulpJSDoc = require("./build/gulp/jsdoc").GulpJSDoc;
 const GulpClean = require("./build/gulp/clean").GulpClean;
 const GulpSass = require("./build/gulp/sass").GulpSass;
 const GulpJSBundle = require("./build/gulp/jsbundle").GulpJSBundle;
-//const GulpLiveReloaded = require("./build/gulp/livereloaded").GulpLiveReloaded;
-//const GulpFileMerge = require("./build/gulp/filemerge").GulpFileMerge;
-const GulpNodeMonitor = require("./build/gulp/nodemon").GulpNodeMonitor;
 const GulpRiot3 = require("./build/gulp/riot3").GulpRiot3;
-
-//const connect = require('gulp-connect');
-//const watch = require('gulp-watch');
 
 gulp.task('build-doc', (cb) => {
     let task = new GulpJSDoc();
