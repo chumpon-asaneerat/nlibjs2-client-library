@@ -176,7 +176,7 @@ class NNavigator {
 // init NNavigator to nlib.
 (() => { NNavigator.init(); })();
 
-// String Extension Methods.
+// String.format Extension Method.
 (() => {
     /**
      * String.format - The C# like format.
@@ -191,6 +191,9 @@ class NNavigator {
         }
         return a
     }
+})();
+// String.repeat Method.
+(() => {
     /**
      * Repeat character by specificed number.
      */
@@ -200,6 +203,41 @@ class NNavigator {
         return str;
     };
 })();
+// String padL,padR Extension Method.
+(() => {
+    /**
+     * Pad Left by specificed number.
+     */
+    String.prototype.padL = function (width, pad) {
+        let ret = this;
+        if (width && width > 0)
+        {
+            if (!pad) pad = " ";
+            let length = width - this.length
+            if (length < 1) 
+                ret = this.substr(0, width);
+            else ret = (String.repeat(pad, length) + this).substr(0, width);
+        }
+        return ret;
+
+    };
+    /**
+     * Pad Right by specificed number.
+     */
+    String.prototype.padR = function (width, pad) {
+        let ret = this;
+        if (width && width > 0)
+        {
+            if (!pad) pad = " ";
+            let length = width - this.length
+            if (length < 1) 
+                ret = this.substr(0, width);
+            else ret = (this + String.repeat(pad, length)).substr(0, width);
+        }
+        return ret;
+    };
+})();
+
 // Date Extension Methods.
 (() => {})();
 
