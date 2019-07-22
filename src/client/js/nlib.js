@@ -205,18 +205,40 @@ class NNavigator {
 })();
 // String padL,padR Extension Method.
 (() => {
+    let verify = (pad, width, length) => {
+        return {
+            pad: (!pad) ? " " : pad,
+            length: width - length
+        }
+    }
+    let formatL = (v, src, width) => {
+        let ret;
+        if (v.length < 1) {
+            ret = src.substr(0, width);
+        }
+        else {
+            ret = (String.repeat(v.pad, v.length) + src).substr(0, width);
+        }
+        return ret;
+    }
+    let formatR = (v, src, width) => {
+        let ret;
+        if (v.length < 1) {
+            ret = src.substr(0, width);
+        }
+        else {
+            ret = (src + String.repeat(v.pad, v.length)).substr(0, width);
+        }
+        return ret;
+    }
     /**
      * Pad Left by specificed number.
      */
     String.prototype.padL = function (width, pad) {
         let ret = this;
-        if (width && width > 0)
-        {
-            if (!pad) pad = " ";
-            let length = width - this.length
-            if (length < 1) 
-                ret = this.substr(0, width);
-            else ret = (String.repeat(pad, length) + this).substr(0, width);
+        if (width && width > 0) {
+            let v = verify(pad, width, this.length)
+            ret = formatL(v, this, width);
         }
         return ret;
 
@@ -226,13 +248,9 @@ class NNavigator {
      */
     String.prototype.padR = function (width, pad) {
         let ret = this;
-        if (width && width > 0)
-        {
-            if (!pad) pad = " ";
-            let length = width - this.length
-            if (length < 1) 
-                ret = this.substr(0, width);
-            else ret = (this + String.repeat(pad, length)).substr(0, width);
+        if (width && width > 0) {
+            let v = verify(pad, width, this.length)
+            ret = formatR(v, this, width);
         }
         return ret;
     };
@@ -240,6 +258,56 @@ class NNavigator {
 
 // Date.format Extension Methods.
 (() => {
+    let formatYears = (format, year) => {
+        if (format.indexOf("yyyy") > -1)
+            format = format.replace("yyyy", year.toString());
+        else if (format.indexOf("yy") > -1)
+            format = format.replace("yy", year.toString().substr(2, 2));
+        return format;
+    }
+    let formatAMPM = (format, hours) => {
+        if (format.indexOf("t") > -1) {
+            if (hours > 11)
+                format = format.replace("t", "pm")
+            else
+                format = format.replace("t", "am")
+        }
+        return format;
+    }
+    let format24Hour = (format, hours) => {
+        if (format.indexOf("HH") > -1)
+            format = format.replace("HH", hours.toString().padL(2, "0"));
+        return format;
+    }
+    let format12Hour = (format, hours) => {
+        if (format.indexOf("hh") > -1) {
+            if (hours > 12) hours - 12;
+            if (hours == 0) hours = 12;
+            format = format.replace("hh", hours.toString().padL(2, "0"));
+        }
+        return format;
+    }
+    let formatHours = (format, hours) => {
+        format = format12Hour(format, hours);
+        format = format24Hour(format, hours);
+        return format;
+    }
+    let formatMinutes = (format, date) => {
+        if (format.indexOf("mm") > -1)
+            format = format.replace("mm", date.getUTCMinutes().toString().padL(2, "0"));
+        return format;
+    }
+    let formatSeconds = (format, date) => {
+        if (format.indexOf("ss") > -1)
+            format = format.replace("ss", date.getUTCSeconds().toString().padL(2, "0"));
+        return format;
+    }
+    let formatMilliseconds = (format, date) => {
+        if (format.indexOf("fff") > -1) {
+            format = format.replace("fff", date.getUTCMilliseconds().toString().padL(3, "0"));
+        }
+        return format;
+    }
     /**
      * Date.format - The C# like DateTime.format.
      */
@@ -258,7 +326,6 @@ class NNavigator {
         //     hh : hour (1-12)
         //     mm : minute (0-59)
         //     ss : second (0-59)
-        //     ss : second (0-59)
         //    fff : milliseconds (0-999)
         let date = this;
         if (!format) format = "yyyy-MM-dd HH-mm-ss.fff";
@@ -266,40 +333,22 @@ class NNavigator {
         let month = date.getUTCMonth() + 1;
         let year = date.getUTCFullYear();
         // year.
-        if (format.indexOf("yyyy") > -1)
-            format = format.replace("yyyy", year.toString());
-        else if (format.indexOf("yy") > -1)
-            format = format.replace("yy", year.toString().substr(2, 2));
+        format = formatYears(format, year);
         // month
-        format = format.replace("MM", month.toString().padL(2, "0"));            
+        format = format.replace("MM", month.toString().padL(2, "0"));          
         // date.
         format = format.replace("dd", date.getUTCDate().toString().padL(2, "0"));
         // hour - am/pm.
         let hours = date.getUTCHours();
-        if (format.indexOf("t") > -1) {
-            if (hours > 11)
-                format = format.replace("t", "pm")
-            else
-                format = format.replace("t", "am")
-        }
+        format = formatAMPM(format, hours);
         // hour.
-        if (format.indexOf("HH") > -1)
-            format = format.replace("HH", hours.toString().padL(2, "0"));
-        if (format.indexOf("hh") > -1) {
-            if (hours > 12) hours - 12;
-            if (hours == 0) hours = 12;
-            format = format.replace("hh", hours.toString().padL(2, "0"));
-        }
+        format = formatHours(format, hours);
         // minute.
-        if (format.indexOf("mm") > -1)
-            format = format.replace("mm", date.getUTCMinutes().toString().padL(2, "0"));
+        format = formatMinutes(format, date);
         // second.
-        if (format.indexOf("ss") > -1)
-            format = format.replace("ss", date.getUTCSeconds().toString().padL(2, "0"));
+        format = formatSeconds(format, date);
         // millisecond.
-        if (format.indexOf("fff") > -1) {
-            format = format.replace("fff", date.getUTCMilliseconds().toString().padL(3, "0"));
-        }
+        format = formatMilliseconds(format, date);
         return format;
     };
 })();
