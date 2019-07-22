@@ -1,0 +1,26 @@
+ABC 123 DEF S12 12S
+a
+mail@yahoo.com
+
+%1A
+%2B
+%Z1
+%ZZ
+%DD
+%11
+%3E
+%7B
+%7C
+
+{ 
+    name: '',
+    types: [
+        { x:1, y: 2},
+        { x:2, y: 3}
+    ],
+    code: {}
+}
+
+(xxx)
+{xxx}
+[xxx]
