@@ -1,3 +1,5 @@
+//#region nlib (core)
+
 class NLib {
     static ctor(factory) {
         let obj = {};
@@ -34,6 +36,10 @@ nlib = (() => {
     }
     return { getInstance: _getInstance };
 })().getInstance();
+
+//#endregion
+
+//#region nlib (utils)
 
 class NUtils {
     /**
@@ -103,6 +109,10 @@ class NUtils {
 }
 // init NUtils to nlib.
 (() => { NUtils.init(); })();
+
+//#endregion
+
+//#region nlib (navigator)
 
 class NNavigator {
     /**
@@ -175,6 +185,10 @@ class NNavigator {
 }
 // init NNavigator to nlib.
 (() => { NNavigator.init(); })();
+
+//#endregion
+
+//#region nlib (extension methods)
 
 // String.format Extension Method.
 (() => {
@@ -353,6 +367,10 @@ class NNavigator {
     };
 })();
 
+//#endregion
+
+//#region nlib (Delegate and Event classes)
+
 /** NDelegate class. The .NET like delegate. */
 class NDelegate {
     constructor() {
@@ -424,3 +442,13 @@ class EventHandler extends NDelegate {
 /** The Event Args class. The .NET like EventArgs. */
 class EventArgs { static get Empty() { return null; } };
 
+//#endregion
+
+//#region TODO
+
+// Cookie
+(() => { })();
+// Local Storage
+(() => { })();
+
+//#endregion
