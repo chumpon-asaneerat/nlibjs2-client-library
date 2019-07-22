@@ -176,6 +176,25 @@ class NNavigator {
 // init NNavigator to nlib.
 (() => { NNavigator.init(); })();
 
+// String Extension Methods.
+(() => {
+    /**
+     * String.format - The C# like format.
+     */
+    String.prototype.format = function() {
+        // Usage:
+        // let a = "welcome {0} to {1}";
+        // a.format('Joe', 'My world');
+        let a = this;
+        for (let k in arguments) {
+            a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), arguments[k]);
+        }
+        return a
+    }
+})();
+// Date Extension Methods.
+(() => {})();
+
 /** NDelegate class. The .NET like delegate. */
 class NDelegate {
     constructor() {
