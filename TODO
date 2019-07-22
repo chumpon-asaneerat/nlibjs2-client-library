@@ -1,7 +1,8 @@
 NLib:
     Client:
         Refactor:
-            ☐ Core and Utils.
+            ✔ Core. @done(19-07-22 10:11)
+            ☐ Utils.
             ☐ Cookie helper class.
             ☐ Local Storage helper class.
             ☐ Array helper class.
