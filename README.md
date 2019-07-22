@@ -2,3 +2,6 @@
 
 The NLib javascript library (Client)
 
+- [ ] todo 1
+- [ ] todo 2
+- [X] ~~todo 3~~
