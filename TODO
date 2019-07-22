@@ -6,6 +6,7 @@ NLib:
             ☐ Cookie helper class.
             ☐ Local Storage helper class.
             ☐ Array helper class.
+            ☐ Port EventHandler and related classes.
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
