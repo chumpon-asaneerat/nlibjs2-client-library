@@ -191,6 +191,14 @@ class NNavigator {
         }
         return a
     }
+    /**
+     * Repeat character by specificed number.
+     */
+    String.repeat = function (chr, count) {
+        var str = "";
+        for (var x = 0; x < count; x++) { str += chr };
+        return str;
+    };
 })();
 // Date Extension Methods.
 (() => {})();
