@@ -1,61 +1,28 @@
-class NLib { }
+class NLib {
+    static ctor(factory) {
+        let obj = {};
+        if (!obj.prototype) obj.prototype = {};
+        NLib.setCreateMethod(obj, factory);
+        return obj;
+    }
+    static setCreateMethod(obj) {
+        obj.create = (factory) => {
+            let result;
+            if (!factory) {
+                result = {};
+                result.prototype = Object.create(Object.prototype);
+            }
+            else {
+                result = new factory();
+                result.prototype = Object.create(factory.prototype);
+            }
+            return result;
+        }
+    }
+}
 
+/** internal nlib instance variable. @ignore */
 NLib.instance = null;
-NLib.helpers = null;
-
-NLib.ctor = (factory) => {
-    let obj = {};
-    if (!obj.prototype) obj.prototype = {};
-    NLib.setCreateMethod(obj, factory);
-    NLib.setHelpersProperty(obj);
-    return obj;
-}
-
-NLib.setCreateMethod = (obj) => {
-    obj.create = (factory) => {
-        let result;
-        if (!factory) {
-            result = {};
-            result.prototype = Object.create(Object.prototype);
-        }
-        else {
-            result = new factory();
-            result.prototype = Object.create(factory.prototype);
-        }
-        return result;
-    }
-}
-
-NLib.setHelpersProperty = (obj) => {
-    // define helpers
-    Object.defineProperty(obj, 'helpers', {
-        get: function () {
-            if (!NLib.helpers)
-                NLib.helpers = new NLib.Helper(obj);
-            return NLib.helpers;
-        }
-    });
-}
-
-NLib.Helper = class {
-    constructor(nlib_instance) {
-        /** internal nlib instance. */
-        this._nlib = nlib_instance;
-        /** the helper module name. */
-        this.ModuleName = 'Helpers';
-    }
-    registerCodeAddIn(instance, addInName, getMethod) {
-        if (!instance) {
-            console.log('instance is null.');
-            return;
-        }
-        //console.log("Module Name: " + addInName);
-        Object.defineProperty(instance, addInName, {
-            configurable: true,
-            get: getMethod
-        });
-    }
-}
 
 nlib = (() => {
     let _instance = null;
@@ -67,7 +34,7 @@ nlib = (() => {
     return { getInstance: _getInstance };
 })().getInstance();
 
-class Navigator {
+class NNavigator {
     gotoUrl(url, queryObject) {
         console.log('gotoUrl');
     }
@@ -76,10 +43,16 @@ class Navigator {
     }
     static init() {
         if (!nlib.nav) {
-            nlib.nav = nlib.create(Navigator);
+            nlib.nav = nlib.create(NNavigator);
         }
         else nlib.nav = nlib.nav;
     }
 }
 // init Navigator to nlib.
-(() => { Navigator.init() })();
+(() => { NNavigator.init(); })();
+
+class doSomething {
+    execute(text) {
+        console.log('execute:' + text);
+    }
+}
