@@ -175,3 +175,75 @@ class NNavigator {
 }
 // init NNavigator to nlib.
 (() => { NNavigator.init(); })();
+
+/** NDelegate class. The .NET like delegate. */
+class NDelegate {
+    constructor() {
+        this._locked = false;
+        this._events = [];
+    };
+    //-- public methods.
+    isFunction(value) {
+        return (value && value instanceof Function);
+    }
+    indexOf(value) {
+        let ret = -1;
+        if (this.isFunction(value))
+            ret = this._events.indexOf(value);
+        return ret;
+    };
+    add(value) {
+        if (this.isFunction(value)) {
+            let index = this.indexOf(value);
+            if (index === -1)
+                this._events.push(value); // append.
+            else this._events[index] = value; // replace.
+        }
+    };
+    remove(value) {
+        if (this.isFunction(value)) {
+            let index = this.indexOf(value);
+            if (index >= 0 && index < this._events.length) {
+                this._events.splice(index, 1); // delete.
+            }
+        }
+    };
+    locked() { this._locked = true; };
+    unlocked() { this._locked = false; };
+    get isLocked() { return this._locked; };
+    invoke(...args) {
+        if (this._locked) return;
+        let evtDataObj = this.createEventData(args);
+        this._events.forEach((evt) => { this.raiseEvent(evt, evtDataObj); });
+    };
+    createEventData(...args) { return args; };
+    raiseEvent(evt, evtDataObj) { evt(evtDataObj) };
+};
+/** EventHandler class. The .NET like EventHandler. */
+class EventHandler extends NDelegate {
+    //-- overrides
+    getArgValue(arg, index) {
+        let ret = null;
+        if (arg && arg.length >= index + 1) ret = arg[index];
+        return ret;
+    }
+    createEventData(...args) {
+        let sender = null;
+        let evtData = null;
+        if (args && args.length >= 1) {
+            sender = this.getArgValue(args[0], 0);
+            evtData = this.getArgValue(args[0], 1);
+            if (!evtData) { evtData = { sender: null, handled: false }; }
+        }
+        return { "sender": sender, "evtData": evtData }
+    };
+    raiseEvent(evt, evtDataObj) {
+        let evtData = (!evtDataObj) ? { sender: null, handled: false } : evtDataObj.evtData;
+        if (!evtData) { evtData = { handled: false }; }
+        if (!evtData.handled) evtData.handled = false;
+        if (!evtData.handled) { evt(evtDataObj.sender, evtData); }
+    };
+};
+/** The Event Args class. The .NET like EventArgs. */
+class EventArgs { static get Empty() { return null; } };
+
