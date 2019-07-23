@@ -108,7 +108,197 @@ class NUtils {
     }
 }
 // init NUtils to nlib.
-(() => { NUtils.init(); })();
+NUtils.init();
+
+//#endregion
+
+//#region nlib (cookie)
+
+/*!
+ * JavaScript Cookie v2.2.0
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+class NCookie {
+    set(key, value, attributes) {
+        NCookie.api.set(key, value, attributes);
+    }
+    get(key) {
+        return NCookie.api.get(key, false);
+    }
+    getJson(key) {
+        return NCookie.api.get(key, true);
+    }
+    remove(key, attributes) {
+        NCookie.api.set(key, '', NCookie.api.extend(attributes, { expires: -1 }));
+    }
+    /** init class prototype to nlib */
+    static init() {
+        if (!nlib.cookie) {
+            nlib.cookie = nlib.create(NCookie);
+        }
+        else nlib.cookie = nlib.cookie;
+    }
+    static test() {
+        console.log('Test Cookies.');
+        let cookie1;
+        console.log('Remove Cookies.');
+        cookie1 = nlib.cookie.remove('key1');
+        cookie1 = nlib.cookie.remove('key2');
+        cookie1 = nlib.cookie.remove('key3');
+        
+        cookie1 = nlib.cookie.get('key1');
+        console.log('Read Cookies value : ', cookie1);
+    
+        console.log('Test Write Cookies and read back.');
+        nlib.cookie.set('key1', 'joe1', { expires: 1 });
+        nlib.cookie.set('key2', 'joe2', { expires: 1 });
+        nlib.cookie.set('key3', { name: 'a', age: 30 }, { expires: 1 });
+        cookie1 = nlib.cookie.get('key1');
+        console.log('Read Cookies value : ', cookie1);
+    
+        let json_cookies1 = nlib.cookie.getJson();
+        console.log('Read Cookies in json : ', json_cookies1);
+    }
+}
+// The NCookie api.
+NCookie.api = class {
+    static extend() {
+        let result = {};
+        for (let i = 0; i < arguments.length; i++) {
+            let attributes = arguments[i];
+            for (let key in attributes) {
+                result[key] = attributes[key];
+            }
+        }
+        return result;
+    }
+    static decode(s) {
+        let expr = /(%[0-9A-Z]{2})+/g;
+        return s.replace(expr, decodeURIComponent);
+    }
+    static get hasDocument() { 
+        return (typeof document !== 'undefined');
+    }
+    static getExpiredDate(attributes) {
+        if (typeof attributes.expires === 'number') {
+            attributes.expires = new Date(new Date() * 1 + attributes.expires * 864e+5);
+        }
+        // We're using "expires" because "max-age" is not supported by IE
+        return attributes.expires ? attributes.expires.toUTCString() : '';
+    }
+    static getWriteValue(value) {
+        let ret = value;
+        try {
+            let result = JSON.stringify(value);
+            let expr = /^[\{\[]/;
+            if (expr.test(result)) {
+                ret = result;
+            }
+        }
+        catch (e) {
+            console.error(e);
+        }
+        let expr = /%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g;
+        return encodeURIComponent(String(ret)).replace(expr, decodeURIComponent);
+    }
+    static getWriteKey(key) {
+        let expr1 = /%(23|24|26|2B|5E|60|7C)/g;
+        let key1 = encodeURIComponent(String(key)).replace(expr1, decodeURIComponent);
+        let expr2 = /[\(\)]/g;
+        let key2 = key1.replace(expr2, escape);
+        return key2;
+    }
+    static stringifiedAttributes(attributes) {
+        let ret = '';
+        for (let attributeName in attributes) {
+            if (!attributes[attributeName]) {
+                continue;
+            }
+            ret += '; ' + attributeName;
+            if (attributes[attributeName] === true) {
+                continue;
+            }
+            // Considers RFC 6265 section 5.2:
+            // ...
+            // 3.  If the remaining unparsed-attributes contains a %x3B (";")
+            //     character:
+            // Consume the characters of the unparsed-attributes up to,
+            // not including, the first %x3B (";") character.
+            // ...
+            ret += '=' + attributes[attributeName].split(';')[0];
+        }
+        return ret;
+    }
+    static set(key, value, attributes) {
+        if (NCookie.api.hasDocument) {
+            attributes = NCookie.api.extend({ path: '/' }, NCookie.api.defaults, attributes);
+            attributes.expires = NCookie.api.getExpiredDate(attributes);
+            value = NCookie.api.getWriteValue(value);
+            key = NCookie.api.getWriteKey(key);
+            let stringifiedAttributes = NCookie.api.stringifiedAttributes(attributes);
+            // update document cookie.
+            document.cookie = key + '=' + value + stringifiedAttributes;
+        }
+    }
+    static getDocumentCookies() {
+        // To prevent the for loop in the first place assign an empty array
+        // in case there are no cookies at all.
+        return document.cookie ? document.cookie.split('; ') : [];
+    }
+    static getData(cookie, json) {
+        let ret = cookie;
+        if (json) {
+            try {
+                ret = JSON.parse(cookie);
+            } 
+            catch (e) { 
+                //console.error('cookie:', cookie, 'error:', e);
+            }
+        }
+        return ret;
+    }
+    static decodeCookie(parts, cookie, jar, json) {
+        let dcookie = cookie;
+        if (!json && dcookie.charAt(0) === '"') {
+            dcookie = dcookie.slice(1, -1);
+        }
+        try {
+            let name = NCookie.api.decode(parts[0]);
+            dcookie = NCookie.api.decode(dcookie);
+            dcookie = NCookie.api.getData(dcookie, json);
+            jar[name] = dcookie;
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+    static extractCookies(key, cookies, jar, json) {
+        for (let i = 0; i < cookies.length; i++) {
+            let parts = cookies[i].split('=');
+            let cookie = parts.slice(1).join('=');
+            NCookie.api.decodeCookie(parts, cookie, jar, json)
+            if (key === name) break;
+        }
+    }
+    static get(key, json) {
+        let ret;
+        if (NCookie.api.hasDocument) {
+            let jar = {};
+            let cookies = NCookie.api.getDocumentCookies();
+            NCookie.api.extractCookies(key, cookies, jar, json);
+            ret = (key) ? jar[key] : jar;
+        }
+        return ret;
+    }
+}
+NCookie.api.defaults = {};
+// init NCookie to nlib.
+NCookie.init();
+// Run Test
+//NCookie.test();
 
 //#endregion
 
@@ -184,7 +374,7 @@ class NNavigator {
     }
 }
 // init NNavigator to nlib.
-(() => { NNavigator.init(); })();
+NNavigator.init();
 
 //#endregion
 
@@ -446,9 +636,9 @@ class EventArgs { static get Empty() { return null; } };
 
 //#region TODO
 
-// Cookie
-(() => { })();
 // Local Storage
-(() => { })();
+(() => {
+})();
 
 //#endregion
+
