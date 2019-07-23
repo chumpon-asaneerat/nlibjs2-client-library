@@ -20,6 +20,8 @@ NLib:
                 ☐ inArray method.
                 ☐ indexOf method.
             ☐ Local Storage helper class.
+            ☐ DateTime class
+            ☐ TimeSpan class
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
