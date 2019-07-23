@@ -2,11 +2,11 @@ NLib:
     Client:
         Refactor:
             ✔ Core. @done(19-07-22 10:11)
-            ☐ Utils.
-            ☐ Cookie helper class.
-            ☐ Local Storage helper class.
+            ✔ Utils. @done(19-07-23 17:36)
+            ✔ Cookie helper class. @done(19-07-23 17:36)
+            ✔ Port EventHandler and related classes. @done(19-07-23 17:36)
             ☐ Array helper class.
-            ☐ Port EventHandler and related classes.
+            ☐ Local Storage helper class.
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
