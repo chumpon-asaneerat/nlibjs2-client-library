@@ -5,9 +5,20 @@ NLib:
             ✔ Utils. @done(19-07-23 17:36)
             ✔ Cookie helper class. @done(19-07-23 17:36)
             ✔ Port EventHandler and related classes. @done(19-07-23 17:36)
-            ✔ String Extension Methods. @done(19-07-23 18:21)
-            ✔ Date Extension Methods. @done(19-07-23 18:21)
-            ☐ Array helper class.
+            String Extension Methods:
+                ✔ format method. @done(19-07-23 18:36)
+                ✔ repeat method. @done(19-07-23 18:36)
+                ✔ padL method. @done(19-07-23 18:36)
+                ✔ padR method. @done(19-07-23 18:36)
+            Date Extension Methods:
+                ✔ format method. @done(19-07-23 18:36)
+            NArray class:
+                ☐ map method.
+                ☐ maps method.
+                ☐ exclude method.
+                ☐ filter method.
+                ☐ inArray method.
+                ☐ indexOf method.
             ☐ Local Storage helper class.
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
