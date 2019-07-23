@@ -380,7 +380,11 @@ NNavigator.init();
 
 //#region nlib (extension methods)
 
+// NLib.Extension namespace.
 NLib.Extension = class {}
+
+//#region String
+
 NLib.Extension.String = class {
     /** String.format - The C# like format. */
     static format(value, ...args) {
@@ -466,65 +470,16 @@ String.prototype.padR = function (width, pad) {
     return NLib.Extension.String.padR(this, width, pad);
 };
 
+//#endregion
+
+//#region Date
+
 // Date.format Extension Methods.
-//NLib.Extension.Date = class {}
-(() => {
-    let formatYears = (format, year) => {
-        if (format.indexOf("yyyy") > -1)
-            format = format.replace("yyyy", year.toString());
-        else if (format.indexOf("yy") > -1)
-            format = format.replace("yy", year.toString().substr(2, 2));
-        return format;
-    }
-    let formatAMPM = (format, hours) => {
-        if (format.indexOf("t") > -1) {
-            if (hours > 11)
-                format = format.replace("t", "pm")
-            else
-                format = format.replace("t", "am")
-        }
-        return format;
-    }
-    let format24Hour = (format, hours) => {
-        if (format.indexOf("HH") > -1)
-            format = format.replace("HH", hours.toString().padL(2, "0"));
-        return format;
-    }
-    let format12Hour = (format, hours) => {
-        if (format.indexOf("hh") > -1) {
-            if (hours > 12) hours - 12;
-            if (hours == 0) hours = 12;
-            format = format.replace("hh", hours.toString().padL(2, "0"));
-        }
-        return format;
-    }
-    let formatHours = (format, hours) => {
-        format = format12Hour(format, hours);
-        format = format24Hour(format, hours);
-        return format;
-    }
-    let formatMinutes = (format, date) => {
-        if (format.indexOf("mm") > -1)
-            format = format.replace("mm", date.getUTCMinutes().toString().padL(2, "0"));
-        return format;
-    }
-    let formatSeconds = (format, date) => {
-        if (format.indexOf("ss") > -1)
-            format = format.replace("ss", date.getUTCSeconds().toString().padL(2, "0"));
-        return format;
-    }
-    let formatMilliseconds = (format, date) => {
-        if (format.indexOf("fff") > -1) {
-            format = format.replace("fff", date.getUTCMilliseconds().toString().padL(3, "0"));
-        }
-        return format;
-    }
-    /**
-     * Date.format - The C# like DateTime.format.
-     */
-    Date.prototype.format = function (format) {
+NLib.Extension.Date = class {
+    /** Date.format - The C# like DateTime.format. */
+    static format(date, format) {
         // Usage:
-        // let a = new Date();
+        // let d = new Date();
         // d.format();
         // d.format('yyyy-MM-dd');
         // The avaliable format:
@@ -538,31 +493,107 @@ String.prototype.padR = function (width, pad) {
         //     mm : minute (0-59)
         //     ss : second (0-59)
         //    fff : milliseconds (0-999)
-        let date = this;
+        let api = NLib.Extension.Date.api;
         if (!format) format = "yyyy-MM-dd HH-mm-ss.fff";
 
         let month = date.getUTCMonth() + 1;
         let year = date.getUTCFullYear();
         // year.
-        format = formatYears(format, year);
+        format = api.formatYears(format, year);
         // month
         format = format.replace("MM", month.toString().padL(2, "0"));          
         // date.
         format = format.replace("dd", date.getUTCDate().toString().padL(2, "0"));
         // hour - am/pm.
         let hours = date.getUTCHours();
-        format = formatAMPM(format, hours);
+        format = api.formatAMPM(format, hours);
         // hour.
-        format = formatHours(format, hours);
+        format = api.formatHours(format, hours);
         // minute.
-        format = formatMinutes(format, date);
+        format = api.formatMinutes(format, date);
         // second.
-        format = formatSeconds(format, date);
+        format = api.formatSeconds(format, date);
         // millisecond.
-        format = formatMilliseconds(format, date);
+        format = api.formatMilliseconds(format, date);
+
         return format;
-    };
-})();
+    }
+}
+NLib.Extension.Date.api = class {
+    static formatYears(format, year) {
+        if (format.indexOf("yyyy") > -1)
+            format = format.replace("yyyy", year.toString());
+        else if (format.indexOf("yy") > -1)
+            format = format.replace("yy", year.toString().substr(2, 2));
+        return format;
+    }
+    static formatAMPM(format, hours) {
+        if (format.indexOf("t") > -1) {
+            if (hours > 11)
+                format = format.replace("t", "pm")
+            else
+                format = format.replace("t", "am")
+        }
+        return format;
+    }
+    static format24Hour(format, hours) {
+        if (format.indexOf("HH") > -1)
+            format = format.replace("HH", hours.toString().padL(2, "0"));
+        return format;
+    }
+    static format12Hour(format, hours) {
+        if (format.indexOf("hh") > -1) {
+            if (hours > 12) hours - 12;
+            if (hours == 0) hours = 12;
+            format = format.replace("hh", hours.toString().padL(2, "0"));
+        }
+        return format;
+    }
+    static formatHours(format, hours) {
+        let api = NLib.Extension.Date.api;
+        format = api.format12Hour(format, hours);
+        format = api.format24Hour(format, hours);
+        return format;
+    }
+    static formatMinutes (format, date) {
+        if (format.indexOf("mm") > -1)
+            format = format.replace("mm", date.getUTCMinutes().toString().padL(2, "0"));
+        return format;
+    }
+    static formatSeconds(format, date) {
+        if (format.indexOf("ss") > -1)
+            format = format.replace("ss", date.getUTCSeconds().toString().padL(2, "0"));
+        return format;
+    }
+    static formatMilliseconds(format, date) {
+        if (format.indexOf("fff") > -1) {
+            format = format.replace("fff", date.getUTCMilliseconds().toString().padL(3, "0"));
+        }
+        return format;
+    }
+}
+/** Date.format - The C# like DateTime.format. */
+Date.prototype.format = function(format) {
+    // Usage:
+    // let a = new Date();
+    // d.format();
+    // d.format('yyyy-MM-dd');
+    // The avaliable format:
+    //   yyyy : year (4 digits)
+    //     yy : year (2 digits)
+    //     MM : month (1-12)
+    //     dd : date (1-31)
+    //      t : pm/am
+    //     HH : hour (0-23)
+    //     hh : hour (1-12)
+    //     mm : minute (0-59)
+    //     ss : second (0-59)
+    //    fff : milliseconds (0-999)
+    let date = this;
+    return NLib.Extension.Date.format(date, format);
+};
+
+//#endregion
 
 //#endregion
 
@@ -648,4 +679,3 @@ class EventArgs { static get Empty() { return null; } };
 })();
 
 //#endregion
-
