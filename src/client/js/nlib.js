@@ -380,87 +380,94 @@ NNavigator.init();
 
 //#region nlib (extension methods)
 
-// String.format Extension Method.
-(() => {
-    /**
-     * String.format - The C# like format.
-     */
-    String.prototype.format = function() {
+NLib.Extension = class {}
+NLib.Extension.String = class {
+    /** String.format - The C# like format. */
+    static format(value, ...args) {
         // Usage:
         // let a = "welcome {0} to {1}";
         // a.format('Joe', 'My world');
-        let a = this;
-        for (let k in arguments) {
-            a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), arguments[k]);
+        let a = value;
+        for (let k in args) {
+            a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), args[k]);
         }
         return a
     }
-})();
-// String.repeat Method.
-(() => {
-    /**
-     * Repeat character by specificed number.
-     */
-    String.repeat = function (chr, count) {
-        var str = "";
+    /** Repeat character by specificed number. */
+    static repeat(chr, count) {
+        let str = "";
         for (var x = 0; x < count; x++) { str += chr };
         return str;
-    };
-})();
-// String padL,padR Extension Method.
-(() => {
-    let verify = (pad, width, length) => {
-        return {
-            pad: (!pad) ? " " : pad,
-            length: width - length
-        }
     }
-    let formatL = (v, src, width) => {
-        let ret;
-        if (v.length < 1) {
-            ret = src.substr(0, width);
-        }
-        else {
-            ret = (String.repeat(v.pad, v.length) + src).substr(0, width);
-        }
-        return ret;
-    }
-    let formatR = (v, src, width) => {
-        let ret;
-        if (v.length < 1) {
-            ret = src.substr(0, width);
-        }
-        else {
-            ret = (src + String.repeat(v.pad, v.length)).substr(0, width);
-        }
-        return ret;
-    }
-    /**
-     * Pad Left by specificed number.
-     */
-    String.prototype.padL = function (width, pad) {
-        let ret = this;
+    /** Pad Left by specificed number. */
+    static padL(value, width, pad) {
+        let api = NLib.Extension.String.api;
+        let ret = value;
         if (width && width > 0) {
-            let v = verify(pad, width, this.length)
-            ret = formatL(v, this, width);
+            let v = api.verify(pad, width, value.length)
+            ret = api.formatL(v, value, width);
         }
         return ret;
+    }
+    /** Pad Right by specificed number. */
+    static padR(value, width, pad) {
+        let api = NLib.Extension.String.api;
+        let ret = value;
+        if (width && width > 0) {
+            let v = api.verify(pad, width, value.length)
+            ret = api.formatR(v, value, width);
+        }
+        return ret;
+    }
+}
+NLib.Extension.String.api = class {
+    static verify(pad, width, length) {
+        return { pad: (!pad) ? " " : pad, length: width - length }
+    }
+    static formatL(v, src, width) {
+        let ret;
+        if (v.length < 1) {
+            ret = src.substr(0, width);
+        }
+        else {
+            ret = (NLib.Extension.String.repeat(v.pad, v.length) + src).substr(0, width);
+        }
+        return ret;
+    }
+    static formatR(v, src, width) {
+        let ret;
+        if (v.length < 1) {
+            ret = src.substr(0, width);
+        }
+        else {
+            ret = (src + NLib.Extension.String.repeat(v.pad, v.length)).substr(0, width);
+        }
+        return ret;
+    }
+}
+/** String.format - The C# like format. */
+String.prototype.format = function() {
+    // Usage:
+    // let a = "welcome {0} to {1}";
+    // a.format('Joe', 'My world');
+    return NLib.Extension.String.format(this, ...arguments);
+}
+/** Repeat character by specificed number. */
+String.repeat = function(chr, count) {
+    return NLib.Extension.String.repeat(chr, count);
+};
+/** Pad Left by specificed number. */
+String.prototype.padL = function (width, pad) {
+    return NLib.Extension.String.padL(this, width, pad);
 
-    };
-    /**
-     * Pad Right by specificed number.
-     */
-    String.prototype.padR = function (width, pad) {
-        let ret = this;
-        if (width && width > 0) {
-            let v = verify(pad, width, this.length)
-            ret = formatR(v, this, width);
-        }
-        return ret;
-    };
-})();
+};
+/** Pad Right by specificed number. */
+String.prototype.padR = function (width, pad) {
+    return NLib.Extension.String.padR(this, width, pad);
+};
 
 // Date.format Extension Methods.
+//NLib.Extension.Date = class {}
 (() => {
     let formatYears = (format, year) => {
         if (format.indexOf("yyyy") > -1)
