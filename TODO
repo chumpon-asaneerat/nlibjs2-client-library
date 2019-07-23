@@ -5,6 +5,8 @@ NLib:
             ✔ Utils. @done(19-07-23 17:36)
             ✔ Cookie helper class. @done(19-07-23 17:36)
             ✔ Port EventHandler and related classes. @done(19-07-23 17:36)
+            ✔ String Extension Methods. @done(19-07-23 18:21)
+            ✔ Date Extension Methods. @done(19-07-23 18:21)
             ☐ Array helper class.
             ☐ Local Storage helper class.
         Rechecks:
