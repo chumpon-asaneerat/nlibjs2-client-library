@@ -680,7 +680,7 @@ class EventArgs { static get Empty() { return null; } };
 
 //#endregion
 
-//#region Timespan (Untested)
+//#region Timespan
 
 /** 
  * The TimeSpan class. 
@@ -873,10 +873,8 @@ TimeSpan.pad = (number, len = 2) => String(number).padStart(len, "0")
  * The DateTime class. Provide various methods and property to work with Date and Time.
  * 
  * @example
- * // nlib load module.
- * const nlib = require("./src/server/js/nlib/nlib");
  * // create new DateTime instance.
- * let dt = new nlib.DateTime();
+ * let dt = new DateTime();
  * // show current DateTime.
  * console.log(dt.toString());
  */
