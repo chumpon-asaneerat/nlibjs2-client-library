@@ -56,7 +56,9 @@ const dist_libs = [
     /* for access precompile riotjs component */
     { "route": "/components", "path": "../../dist/component/riot" },
     /* for access src nlib.js */
-    { "route": "/dist/js", "path": "../../src/client/js" }
+    { "route": "/dist/js", "path": "../../src/client/js" },
+    /* for test nlib.js */
+    { "route": "/dist/js", "path": "../../src/client/test" },
 ];
 
 function dist_lib(app, exportRoute, localPath) {

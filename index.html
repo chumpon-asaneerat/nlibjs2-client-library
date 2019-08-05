@@ -43,21 +43,16 @@
     -->
     <!-- nlib -->
     <script src="dist/js/nlib.js"></script>
+    <!-- nlib test scripts -->
+    <!--
+    <script src="dist/js/timespan.js"></script>
+    -->
+    <script src="dist/js/datetime.js"></script>
 
     <!-- page custom script -->
     <script>
         //riot.mount('app', { text: 'XXX' })
         //nlib.nav.gotoUrl('/')
-        let dt = Date.now();
-        setTimeout(() => {
-            let ts = new TimeSpan(Date.now() - dt);
-            console.log('total days:', ts.totalDays);
-            console.log('total hours:', ts.totalHours)
-            console.log('total minutes:', ts.totalMinutes)
-            console.log('total seconds:', ts.totalSeconds)
-            console.log('total milliseconds:', ts.totalMilliseconds)
-            console.log('elapse:', ts.toString())
-        }, 1512)
     </script>
 </body>
 </html>
