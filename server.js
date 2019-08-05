@@ -67,6 +67,8 @@ const dist_libs = [
     { "route": "/dist", "path": "jquery-org-chart-2.1.3" },
     /* tabulator */
     { "route": "/dist", "path": "tabulator-4.3.0" },
+    /* ace */
+    { "route": "/dist/js", "path": "ace-1.4.5" },
     /* riotjs */
     { "route": "/dist/js", "path": "riotjs-3.13.2" },
     /* for access precompile riotjs component */

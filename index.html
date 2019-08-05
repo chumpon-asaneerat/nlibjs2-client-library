@@ -30,7 +30,14 @@
         <input type="file" name="myFiles2" multiple>
         <input type="submit" value="Upload your files">
     </form>
-    
+
+    <pre>
+        <code class="json" id="code">
+        </code>
+    </pre>
+
+    <div id="editor" style="margin: 0 auto; width: 70%; height: 300px;"></div>
+        
     <!-- JQuery -->
     <script src="/dist/js/jquery.min.js"></script>
     <!-- JQuery UI -->
@@ -41,6 +48,24 @@
     <script src="/dist/js/bootstrap.min.js">/* bootstrap required jQuery and popperjs. */</script>
     <!-- Moment.js -->
     <script src="/dist/js/moment.min.js"></script>
+    <!-- ace editor -->
+    <script src="/dist/js/ace.js"></script>
+    <script src="/dist/js/mode-html.js"></script>
+    <script src="/dist/js/mode-json.js"></script>
+    <script src="/dist/js/mode-javascript.js"></script>
+    <!-- ace editor init -->
+    <script>
+        let editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        
+        let src = 
+`function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}`
+        editor.session.setValue(src)
+    </script>
     <!-- Riot.js -->
     <script src="/dist/js/riot.min.js"></script>
     <!-- Riot.js components -->
