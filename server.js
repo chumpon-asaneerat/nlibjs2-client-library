@@ -10,7 +10,6 @@ const helmet = require("helmet");
 const bodyparser = require("body-parser");
 const cookieparser = require("cookie-parser");
 const favicon = require("serve-favicon");
-const multer = require('multer');
 const formidable = require('formidable');
 
 //#endregion
@@ -29,25 +28,6 @@ app.use(bodyparser.urlencoded({ extended: true }));
 
 const iconpath = path.join(__dirname, "public", "favicon.ico");
 app.use(favicon(iconpath));
-
-//#endregion
-
-//#region multer middleware (setup)
-
-// SET STORAGE
-let storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        let dest = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(dest)) fs.mkdirSync(dest);
-        cb(null, dest)
-    },
-    filename: function (req, file, cb) {        
-        //cb(null, file.fieldname + '-' + Date.now())
-        cb(null, file.originalname)
-    }
-})
-   
-let upload = multer({ storage: storage })
 
 //#endregion
 
@@ -126,34 +106,9 @@ app.get("/:file", (req, res, next) => {
 
 //#endregion
 
-//#region Upload with multer
-
-app.post('/uploadfile', upload.single('myFile'), (req, res, next) => {
-    const file = req.file
-    if (!file) {
-        const error = new Error('Please upload a file')
-        error.httpStatusCode = 400
-        return next(error)
-    }
-    res.send(file)
-})
-
-//Uploading multiple files
-app.post('/uploadmultiple', upload.array('myFiles', 12), (req, res, next) => {
-    const files = req.files
-    if (!files) {
-        const error = new Error('Please choose files')
-        error.httpStatusCode = 400
-        return next(error)
-    }
-    res.send(files)
-})
-
-//#endregion
-
 //#region Upload with formidable
 
-app.post('/uploadmultiple2', function (req, res){
+app.post('/uploadmultiple', function (req, res){
     let form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
     form.parse(req);
