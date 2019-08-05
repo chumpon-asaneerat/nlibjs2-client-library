@@ -680,55 +680,89 @@ class EventArgs { static get Empty() { return null; } };
 
 //#endregion
 
-//#region Ajax, XMLHttpRequest, Fetch api
+//#region XMLHttpRequest
 
 class XHR {
     static get(url, callback) {
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", url, true); 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let contentType = XHR.getContentType(xhr);
-                let fn = XHR.findGetExecuteFunction(contentType)
-                XHR.exceuteGetFunction(xhr, fn, callback);
-            }
-        }
+        
+        XHR.setReadyHandler(xhr, callback);
+        XHR.setTimeoutHandler(xhr, callback);
+        XHR.setErrorHandler(xhr, callback);
+
+        xhr.open("GET", url, true);
         xhr.send();
-    }
-    static getContentType(xhr) {
-        let resType = xhr.getResponseHeader('content-type');
-        let idx = resType.indexOf(';');
-        let ret = resType.substring(0, idx).toLowerCase();
-        return ret;
-    }
-    static findGetExecuteFunction(contentType) {
-        let fns = XHR.getFunctions.map((obj) => { return obj.type })
-        let idx = fns.indexOf(contentType);
-        return (idx !== -1) ? XHR.getFunctions[idx] : null;
-    }
-    static exceuteGetFunction(xhr, fn, callback) {
-        if (!fn) {
-            callback(null)
-        }
-        else {
-            fn.execute(xhr, callback)
-        }
     }
 }
 
 XHR.getFunctions = [
     { 
-        type: 'application/json', execute: (xhr, cb) => cb(xhr.responseText)
+        type: 'application/json', execute: (xhr, cb) => {
+            let data = { xhr: xhr, result: xhr.responseText };
+            cb(data);
+        }
     },
     { 
-        type: 'application/javascript', execute: (xhr, cb) => cb(xhr.responseText)
+        type: 'application/javascript', execute: (xhr, cb) => {
+            let data = { xhr: xhr, result: xhr.responseText };
+            cb(data);
+        }
     },
     { 
         type: 'blob', execute: (xhr, cb) => { 
             console.log('detected blob object.');
+            let data = { xhr: xhr, result: null };
+            cb(data);
         }
     }
-]
+];
+
+XHR.getContentType = (xhr) => {
+    let resType = xhr.getResponseHeader('content-type');
+    let idx = resType.indexOf(';');
+    let ret = resType.substring(0, idx).toLowerCase();
+    return ret;
+}
+XHR.findGetExecuteFunction = (contentType) => {
+    let fns = XHR.getFunctions.map((obj) => { return obj.type });
+    let idx = fns.indexOf(contentType);
+    return (idx !== -1) ? XHR.getFunctions[idx] : null;
+}
+XHR.exceuteGetFunction = (xhr, fn, callback) => {
+    if (!fn) {
+        let data = { xhr: xhr, result: null }
+        callback(data);
+    }
+    else {
+        fn.execute(xhr, callback);
+    }
+}
+
+XHR.setReadyHandler = (xhr, callback) => {
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let contentType = XHR.getContentType(xhr);
+            let fn = XHR.findGetExecuteFunction(contentType);
+            XHR.exceuteGetFunction(xhr, fn, callback);
+        }
+    }
+}
+
+XHR.setTimeoutHandler = (xhr, callback) => {
+    xhr.ontimeout = () => {
+        console.log('detected timeout!');
+        let data = { xhr: xhr, result: null }
+        callback(data);
+    }
+}
+
+XHR.setErrorHandler = (xhr, callback) => {
+    xhr.onerror = () => {
+        console.log('detected error!');
+        let data = { xhr: xhr, result: null }
+        callback(data);
+    }
+}
 
 //#endregion
 
