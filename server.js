@@ -69,6 +69,10 @@ const dist_libs = [
     { "route": "/dist", "path": "tabulator-4.3.0" },
     /* ace */
     { "route": "/dist/js", "path": "ace-1.4.5" },
+    /* simplebar */
+    { "route": "/dist", "path": "simplebar-4.1.0" },
+    /* overlay-scrollbar */
+    { "route": "/dist", "path": "overlay-scrollbars-1.9.1" },
     /* riotjs */
     { "route": "/dist/js", "path": "riotjs-3.13.2" },
     /* for access precompile riotjs component */
