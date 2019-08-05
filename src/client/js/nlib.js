@@ -1353,3 +1353,5 @@ DateTime.LocaleSettings = {
 //#endregion
 
 //#endregion
+
+console.log('nlib loaded.')
