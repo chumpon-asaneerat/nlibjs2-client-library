@@ -23,8 +23,19 @@
     <link href="/dist/css/emojisymbol.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <p><i class="fas fa-arrow-right"></i>Sample icon</p>
+    <p><i class="fas fa-arrow-right">&nbsp;&nbsp;</i>Sample icon</p>
     
+    <!--  SINGLE FILE -->
+    <form action="/uploadfile" enctype="multipart/form-data" method="POST"> 
+        <input type="file" name="myFile" />
+        <input type="submit" value="Upload a file"/>
+    </form>
+    <!-- MULTIPLE FILES -->
+    <form action="/uploadmultiple"  enctype="multipart/form-data" method="POST">
+        Select images: <input type="file" name="myFiles" multiple>
+        <input type="submit" value="Upload your files"/>
+    </form>  
+
     <!-- JQuery -->
     <script src="/dist/js/jquery.min.js"></script>
     <!-- JQuery UI -->
