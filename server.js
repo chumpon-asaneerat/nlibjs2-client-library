@@ -11,6 +11,7 @@ const bodyparser = require("body-parser");
 const cookieparser = require("cookie-parser");
 const favicon = require("serve-favicon");
 const multer = require('multer');
+const formidable = require('formidable');
 
 //#endregion
 
@@ -28,6 +29,10 @@ app.use(bodyparser.urlencoded({ extended: true }));
 
 const iconpath = path.join(__dirname, "public", "favicon.ico");
 app.use(favicon(iconpath));
+
+//#endregion
+
+//#region multer middleware (setup)
 
 // SET STORAGE
 let storage = multer.diskStorage({
@@ -102,6 +107,10 @@ dist_libs.forEach(element => {
 
 //#region Express routes
 
+//#region Express routes
+
+//#region home and index.html
+
 app.get("/", (req, res) => {
     res.status(200).send(`It's work!!!`);
 });
@@ -114,6 +123,10 @@ app.get("/:file", (req, res, next) => {
         next();
     }
 });
+
+//#endregion
+
+//#region Upload with multer
 
 app.post('/uploadfile', upload.single('myFile'), (req, res, next) => {
     const file = req.file
@@ -135,6 +148,40 @@ app.post('/uploadmultiple', upload.array('myFiles', 12), (req, res, next) => {
     }
     res.send(files)
 })
+
+//#endregion
+
+//#region Upload with formidable
+
+app.post('/uploadmultiple2', function (req, res){
+    let form = new formidable.IncomingForm();
+    form.encoding = 'utf-8';
+    form.parse(req);
+    form.on('progress', (bytesReceived, bytesExpected) => {
+        //let percent_complete = (bytesReceived / bytesExpected) * 100;
+        //console.log(percent_complete.toFixed(2));
+        // required socket.io to emit event back to client.
+    })
+    form.on('field', (name, field) => { console.log('Field', name, field) })
+    form.on('fileBegin', (name, file) => {
+        let dest = path.join(__dirname, 'uploads');
+        if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+        file.path = path.join(dest, file.name);
+    })
+    form.on('file', (name, file) => { console.log('Uploaded ' + file.name); })
+    form.on('aborted', () => { console.error('Request aborted by the user') })
+    form.on('error', (err) => {
+        console.error('Error', err)
+        throw err
+    })
+    form.on('end', () => { 
+        res.end()        
+    })
+    //res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+//#endregion
+
 //#endregion
 
 //#region Express server start
