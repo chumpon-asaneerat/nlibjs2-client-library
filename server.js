@@ -1,5 +1,9 @@
+//#region common requires
+
 const path = require("path");
 const fs = require('fs');
+
+//#endregion
 
 //#region Express and middlewares (require)
 
@@ -85,7 +89,15 @@ dist_libs.forEach(element => {
 
 //#endregion
 
-//#region Express routes
+//#region Express Utils functions
+
+const sendJson = (req, res, data) => {
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.write(JSON.stringify(data, null, 4,));
+    res.end();    
+};
+
+//#endregion
 
 //#region Express routes
 
@@ -133,6 +145,18 @@ app.post('/uploadmultiple', function (req, res){
         res.end()        
     })
     //res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+//#endregion
+
+//#region get test json routes
+
+app.get("/sample", (req, res) => {
+    let data = {
+        name: 'joe',
+        value: Date.now()
+    }
+    sendJson(req, res, data);
 });
 
 //#endregion
