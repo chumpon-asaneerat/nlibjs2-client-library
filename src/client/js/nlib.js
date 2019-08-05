@@ -672,11 +672,15 @@ class EventArgs { static get Empty() { return null; } };
 
 //#endregion
 
-//#region TODO
+//#region TODO Local Storage
 
 // Local Storage
 (() => {
 })();
+
+//#endregion
+
+//#region Ajax, XHTTP, Fetch api
 
 //#endregion
 
