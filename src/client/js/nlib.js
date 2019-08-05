@@ -867,7 +867,7 @@ TimeSpan.pad = (number, len = 2) => String(number).padStart(len, "0")
 
 //#endregion
 
-//#region DateTime (Untested)
+//#region DateTime
 
 /** 
  * The DateTime class. Provide various methods and property to work with Date and Time.
