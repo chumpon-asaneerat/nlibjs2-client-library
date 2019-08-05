@@ -151,14 +151,18 @@ app.post('/uploadmultiple', function (req, res){
 
 //#endregion
 
-//#region get test json routes
+//#region get test (json, js, image, audio, video) routes
 
-app.get("/sample", (req, res) => {
+app.get("/getJson", (req, res) => {
     let data = {
         name: 'joe',
         value: Date.now()
     }
     sendJson(req, res, data);
+});
+
+app.get("/getJavaScript", (req, res) => {
+    res.sendFile(path.join(__dirname, 'server.js'))
 });
 
 //#endregion

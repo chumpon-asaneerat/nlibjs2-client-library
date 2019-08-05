@@ -680,7 +680,55 @@ class EventArgs { static get Empty() { return null; } };
 
 //#endregion
 
-//#region Ajax, XHTTP, Fetch api
+//#region Ajax, XMLHttpRequest, Fetch api
+
+class XHR {
+    static get(url, callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true); 
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let contentType = XHR.getContentType(xhr);
+                let fn = XHR.findGetExecuteFunction(contentType)
+                XHR.exceuteGetFunction(xhr, fn, callback);
+            }
+        }
+        xhr.send();
+    }
+    static getContentType(xhr) {
+        let resType = xhr.getResponseHeader('content-type');
+        let idx = resType.indexOf(';');
+        let ret = resType.substring(0, idx).toLowerCase();
+        return ret;
+    }
+    static findGetExecuteFunction(contentType) {
+        let fns = XHR.getFunctions.map((obj) => { return obj.type })
+        let idx = fns.indexOf(contentType);
+        return (idx !== -1) ? XHR.getFunctions[idx] : null;
+    }
+    static exceuteGetFunction(xhr, fn, callback) {
+        if (!fn) {
+            callback(null)
+        }
+        else {
+            fn.execute(xhr, callback)
+        }
+    }
+}
+
+XHR.getFunctions = [
+    { 
+        type: 'application/json', execute: (xhr, cb) => cb(xhr.responseText)
+    },
+    { 
+        type: 'application/javascript', execute: (xhr, cb) => cb(xhr.responseText)
+    },
+    { 
+        type: 'blob', execute: (xhr, cb) => { 
+            console.log('detected blob object.');
+        }
+    }
+]
 
 //#endregion
 

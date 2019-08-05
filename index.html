@@ -33,6 +33,11 @@
 
     <div id="editor" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
 
+    <br>
+    <button onclick="getSampleJson();">Get json</button>
+    <button onclick="getSampleJavaScript();">Get javascript</button>
+    <div id="jsonEd" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
+
     <!-- JQuery -->
     <script src="/dist/js/jquery.min.js"></script>
     <!-- JQuery UI -->
@@ -79,6 +84,22 @@
     <script>
         //riot.mount('app', { text: 'XXX' })
         //nlib.nav.gotoUrl('/')
+        let jsonEd = ace.edit("jsonEd");
+        jsonEd.setTheme("ace/theme/monokai");
+
+        let getSampleJson = () => {
+            XHR.get('/getJson', (result) => {
+                jsonEd.session.setMode("ace/mode/json");
+                jsonEd.session.setValue(result)
+            })
+        }
+
+        let getSampleJavaScript = () => {
+            XHR.get('/getJavaScript', (result) => {
+                jsonEd.session.setMode("ace/mode/javascript");
+                jsonEd.session.setValue(result)
+            })
+        }
     </script>
 </body>
 </html>
