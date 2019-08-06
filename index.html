@@ -27,7 +27,14 @@
     <img src="/public/images/gif/emoji/transparent/emo-nt-01.gif" 
         height="auto" width="auto" 
         style="display: block; margin-left: auto; margin-right: auto;">
-    
+
+    <br>
+    <button onclick="getImage();">Get image</button>
+    <img id="img1" src="" 
+        height="auto" width="auto" 
+        style="display: block; margin-left: auto; margin-right: auto;">
+
+    <br>    
     <!-- MULTIPLE FILES -->
     <form action="/uploadmultiple" enctype="multipart/form-data" method="POST">
         <input type="file" name="myFiles2" multiple>
@@ -99,6 +106,20 @@
                 jsonEd.session.setMode("ace/mode/javascript");
                 let src = (data.result) ? data.result : '';
                 jsonEd.session.setValue(src)
+            })
+        }
+        let img = document.getElementById('img1');
+        img.onload = function(e) {
+            if (img.src && img.src.startsWith('blob:')) {
+                console.log('revoke exist image')
+                URL.revokeObjectURL(img.src); // Clean up after yourself.
+            }
+        }
+        let getImage = () => {
+            let url = '/public/images/gif/emoji/normal/emo-n-01.gif';
+            XHR.getFile(url, (data) => {
+                let obj = (data.result) ? URL.createObjectURL(data.result) : null;
+                img.src = obj;
             })
         }
     </script>

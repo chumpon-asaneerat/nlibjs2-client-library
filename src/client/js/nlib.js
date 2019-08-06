@@ -685,12 +685,25 @@ class EventArgs { static get Empty() { return null; } };
 class XHR {
     static get(url, callback) {
         let xhr = new XMLHttpRequest();
+
+        xhr.open("GET", url, true);
         
         XHR.setReadyHandler(xhr, callback);
         XHR.setTimeoutHandler(xhr, callback);
         XHR.setErrorHandler(xhr, callback);
 
+        xhr.send();
+    }
+
+    static getFile(url, callback) {
+        let xhr = new XMLHttpRequest();
+
         xhr.open("GET", url, true);
+        xhr.responseType = 'blob';
+        XHR.setLoadHandler(xhr, callback);
+        XHR.setTimeoutHandler(xhr, callback);
+        XHR.setErrorHandler(xhr, callback);
+
         xhr.send();
     }
 }
@@ -761,6 +774,17 @@ XHR.setErrorHandler = (xhr, callback) => {
         console.log('detected error!');
         let data = { xhr: xhr, result: null }
         callback(data);
+    }
+}
+
+XHR.setLoadHandler = (xhr, callback) => {
+    xhr.onload = (e) => {
+        //console.log(e) // the ProgressEvent
+        if (/*xhr.readyState === 4 && */xhr.status === 200) {
+            // Note: .response instead of .responseText
+            let data = { xhr: xhr, result: xhr.response }
+            callback(data);
+        }
     }
 }
 
