@@ -29,9 +29,11 @@
         style="display: block; margin-left: auto; margin-right: auto;">
 
     <br>
-    <button onclick="getImage();">Get image</button>
+    <button onclick="getImage(0);">Get image 1</button>
+    <button onclick="getImage(1);">Get image 2</button>
+    <button onclick="getImage(2);">Get image 3</button>
     <img id="img1" src="" 
-        height="auto" width="auto" 
+        height="150px" width="auto" 
         style="display: block; margin-left: auto; margin-right: auto;">
 
     <br>    
@@ -109,20 +111,54 @@
             })
         }
         let img = document.getElementById('img1');
+        let images = [
+            { url: '/public/images/gif/emoji/normal/emo-n-01.gif', src: '' },
+            { url: '/public/images/png/fruits/apple.png', src: '' },
+            { url: '/public/images/backgrounds/bg-01.jpg', src: '' }
+        ]
+
+        let findImage = (url) => {
+            let urls = images.map((oImg) => { return oImg.url.toLowerCase() })
+            let idx = urls.indexOf(url.toLowerCase())
+            let obj = null;
+            if (idx !== -1) {
+                obj = images[idx];
+            }
+            else {
+                obj = { url: url, scr: '' }
+                images.push(obj)
+            }            
+            return obj;
+        }
+
         img.onload = function(e) {
             if (img.src && img.src.startsWith('blob:')) {
                 console.log('revoke exist image')
                 URL.revokeObjectURL(img.src); // Clean up after yourself.
             }
         }
-        let getImage = () => {
-            let url = '/public/images/gif/emoji/normal/emo-n-01.gif';
-            XHR.getFile(url, (data) => {
-                if (data.result) {
-                    let obj = URL.createObjectURL(data.result);
-                    img.src = obj;
-                }
-            })
+
+        let getImage = (index) => {
+            
+            let url = images[index].url;
+            let obj = findImage(url);
+            if (!obj) {
+                console.log('find image error!');
+                return;
+            }
+            if (obj.src) {
+                let src = URL.createObjectURL(obj.src);
+                img.src = src;
+            }
+            else {
+                XHR.getFile(url, (data) => {
+                    if (data.result) {
+                        obj.src = data.result;
+                        let src = URL.createObjectURL(obj.src);
+                        img.src = src;
+                    }
+                })
+            }
         }
     </script>
 
