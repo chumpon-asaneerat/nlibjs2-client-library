@@ -220,8 +220,8 @@
         let uploadFiles = () => {
             XHR.sendFiles('/uploadmultiple', files, 
             (progressInfo) => {
-                progress1.value = progressInfo.value;
-                progress1.textContent = progressInfo.value.toString() + '% complete'; // Fallback for unsupported browsers.
+                progress1.value = progressInfo.result;
+                progress1.textContent = progressInfo.result.toString() + '% complete'; // Fallback for unsupported browsers.
             },
             () => {
                 clearFileInput();

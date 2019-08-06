@@ -697,19 +697,17 @@ class XHR {
 
         xhr.send();
     }
-
     static getFile(url, callback) {
         let xhr = new XMLHttpRequest();
 
         xhr.open("GET", url, true);
         xhr.responseType = 'blob';
-        XHR.setLoadHandler(xhr, callback);
+        XHR.setGetLoadHandler(xhr, callback);
         XHR.setTimeoutHandler(xhr, callback);
         XHR.setErrorHandler(xhr, callback);
 
         xhr.send();
     }
-
     static sendFiles(url, files, progresssCB, completedCB) {
         let formData = new FormData();
         for (let i = 0, file; file = files[i]; ++i) {
@@ -718,105 +716,72 @@ class XHR {
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', url, true);
-
-        xhr.onload = (e) => {
-            if (xhr.status == 200) {
-                //console.log('onload');
-                //console.log(xhr.response);
-                completedCB();
-            }
-        }
-
-        xhr.upload.onprogress = function(e) {
-            console.log('onprogress');
-            if (e.lengthComputable) {
-                let result = {
-                    value: (e.loaded / e.total) * 100
-                }
-                progresssCB(result)
-            }
-        }
+        XHR.setPostLoadHandler(xhr, completedCB);
+        XHR.setTimeoutHandler(xhr, completedCB);
+        XHR.setErrorHandler(xhr, completedCB);
+        XHR.setPostProgressHandler(xhr, progresssCB);
 
         xhr.send(formData);
     }
 }
 
-XHR.getFunctions = [
-    { 
-        type: 'application/json', execute: (xhr, cb) => {
-            let data = { xhr: xhr, result: xhr.responseText };
-            cb(data);
-        }
-    },
-    { 
-        type: 'application/javascript', execute: (xhr, cb) => {
-            let data = { xhr: xhr, result: xhr.responseText };
-            cb(data);
-        }
-    },
-    { 
-        type: 'blob', execute: (xhr, cb) => { 
-            console.log('detected blob object.');
-            let data = { xhr: xhr, result: null };
-            cb(data);
-        }
-    }
-];
-
-XHR.getContentType = (xhr) => {
-    let resType = xhr.getResponseHeader('content-type');
-    let idx = resType.indexOf(';');
-    let ret = resType.substring(0, idx).toLowerCase();
-    return ret;
-}
-XHR.findGetExecuteFunction = (contentType) => {
-    let fns = XHR.getFunctions.map((obj) => { return obj.type });
-    let idx = fns.indexOf(contentType);
-    return (idx !== -1) ? XHR.getFunctions[idx] : null;
-}
-XHR.exceuteGetFunction = (xhr, fn, callback) => {
-    if (!fn) {
-        let data = { xhr: xhr, result: null }
+XHR.executeCallback = (xhr, callback) => {    
+    if (callback) {
+        let data = { xhr: xhr, result: xhr.responseText }
         callback(data);
     }
-    else {
-        fn.execute(xhr, callback);
-    }
 }
-
 XHR.setReadyHandler = (xhr, callback) => {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            let contentType = XHR.getContentType(xhr);
-            let fn = XHR.findGetExecuteFunction(contentType);
-            XHR.exceuteGetFunction(xhr, fn, callback);
+            XHR.executeCallback(xhr, callback);
         }
     }
 }
-
 XHR.setTimeoutHandler = (xhr, callback) => {
     xhr.ontimeout = () => {
         console.log('detected timeout!');
-        let data = { xhr: xhr, result: null }
-        callback(data);
+        if (callback) {
+            let data = { xhr: xhr, result: null }
+            callback(data);
+        }
     }
 }
-
 XHR.setErrorHandler = (xhr, callback) => {
     xhr.onerror = () => {
         console.log('detected error!');
-        let data = { xhr: xhr, result: null }
-        callback(data);
+        if (callback) {
+            let data = { xhr: xhr, result: null }
+            callback(data);
+        }
     }
 }
-
-XHR.setLoadHandler = (xhr, callback) => {
+XHR.setGetLoadHandler = (xhr, callback) => {
     xhr.onload = (e) => {
         //console.log(e) // the ProgressEvent
         if (/*xhr.readyState === 4 && */xhr.status === 200) {
             // Note: .response instead of .responseText
             let data = { xhr: xhr, result: xhr.response }
             callback(data);
+        }
+    }
+}
+XHR.setPostLoadHandler = (xhr, callback) => {
+    xhr.onload = (e) => {
+        if (xhr.status == 200) {
+            //console.log('onload');
+            //console.log(xhr.response);
+            let data = { xhr: xhr, result: xhr.response }
+            callback(data);
+        }
+    }
+}
+XHR.setPostProgressHandler = (xhr, callback) => {
+    xhr.upload.onprogress = (e) => {
+        //console.log('onprogress');
+        if (e.lengthComputable) {
+            let data = { xhr: xhr, result: (e.loaded / e.total) * 100 }
+            callback(data)
         }
     }
 }

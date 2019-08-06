@@ -144,7 +144,7 @@ app.post('/uploadmultiple', function (req, res){
 
     // Limits the size of uploaded file. If this value is exceeded, an 'error' event is emitted. 
     // The default size is 200MB.
-    form.maxFileSize = 1024 * 1024 * 1024; // exntend to 1GB.
+    form.maxFileSize = 5 * 1024 * 1024 * 1024; // exntend to 5GB.
 
     // Limits the number of fields that the querystring parser will decode.
     // Defaults to 1000 (0 for unlimited).
