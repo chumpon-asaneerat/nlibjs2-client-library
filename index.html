@@ -23,32 +23,65 @@
     <link href="/dist/css/emojisymbol.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <p><i class="fas fa-arrow-right">&nbsp;&nbsp;</i>Sample icon</p>
-    <img src="/public/images/gif/emoji/transparent/emo-nt-01.gif" 
-        height="auto" width="auto" 
-        style="display: block; margin-left: auto; margin-right: auto;">
+    <div class="container-fluid m-0 m-auto">
+        <h3>Font awesome sample</h3>
+        <p><i class="fas fa-arrow-right">&nbsp;&nbsp;</i>Sample icon</p>
+        <hr>
+    </div>
 
     <br>
-    <button onclick="getImage(0);">Get image 1</button>
-    <button onclick="getImage(1);">Get image 2</button>
-    <button onclick="getImage(2);">Get image 3</button>
-    <img id="img1" src="" 
-        height="150px" width="auto" 
-        style="display: block; margin-left: auto; margin-right: auto;">
-
-    <br>    
-    <!-- MULTIPLE FILES -->
-    <form action="/uploadmultiple" enctype="multipart/form-data" method="POST">
-        <input type="file" name="myFiles2" multiple>
-        <input type="submit" value="Upload your files">
-    </form>
-
-    <div id="editor" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
+    <div class="container-fluid m-0 m-auto">
+        <h3>Load image from static route</h3>
+        <br>
+        <br>
+        <img src="/public/images/gif/emoji/transparent/emo-nt-01.gif" 
+            height="auto" width="auto" 
+            style="display: block; margin-left: auto; margin-right: auto;">
+        <hr>
+    </div>
 
     <br>
-    <button onclick="getSampleJson();">Get json</button>
-    <button onclick="getSampleJavaScript();">Get javascript</button>
-    <div id="jsonEd" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
+    <div class="container-fluid m-0 m-auto">
+        <h3>Load image from XHR</h3>
+        <button onclick="getImage(0);">Get image 1</button>
+        <button onclick="getImage(1);">Get image 2</button>
+        <button onclick="getImage(2);">Get image 3</button>
+        <br>
+        <br>
+        <img id="img1" src="" 
+            height="150px" width="auto" 
+            style="display: block; margin-left: auto; margin-right: auto;">
+
+        <hr>
+    </div>
+
+    <br>
+    <div class="container-fluid m-0 m-auto">
+        <h3>Upload files</h3>
+        <!-- MULTIPLE FILES -->    
+        <form action="/uploadmultiple" enctype="multipart/form-data" method="POST">
+            <input type="file" name="myFiles2" multiple>
+            <input type="submit" value="Upload your files">
+        </form>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container-fluid m-0 m-auto">
+        <h3>Ace editor sample (static code).</h3>
+        <div id="editor" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container-fluid m-0 m-auto">
+        <h3>Ace editor sample (load code via XHR).</h3>
+        <button onclick="getSampleJson();">Get json</button>
+        <button onclick="getSampleJavaScript();">Get javascript</button>
+        <br>
+        <div id="jsonEd" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
+        <hr>
+    </div>
 
     <!-- JQuery -->
     <script src="/dist/js/jquery.min.js"></script>
