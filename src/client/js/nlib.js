@@ -682,6 +682,9 @@ class EventArgs { static get Empty() { return null; } };
 
 //#region XMLHttpRequest
 
+// Reference:
+// New Tricks in XMLHttpRequest2: https://www.html5rocks.com/en/tutorials/file/xhr2/
+
 class XHR {
     static get(url, callback) {
         let xhr = new XMLHttpRequest();
