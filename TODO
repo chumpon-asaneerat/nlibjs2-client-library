@@ -20,8 +20,16 @@ NLib:
                 ☐ inArray method.
                 ☐ indexOf method.
             ☐ Local Storage helper class.
-            ☐ DateTime class
-            ☐ TimeSpan class
+            ✔ DateTime class @done(19-08-06 23:47)
+            ✔ TimeSpan class @done(19-08-06 23:47)
+            XMLHttpRequest2:
+                ✔ GET url @done(19-08-06 23:48)
+                ✔ GET file (blob) @done(19-08-06 23:49)
+                ☐ POST url
+                ☐ POST file(s)
+            Blob Cache:
+                ☐ Simple cache
+                ☐ Advance cache
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
