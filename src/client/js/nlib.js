@@ -709,6 +709,36 @@ class XHR {
 
         xhr.send();
     }
+
+    static sendFiles(url, files, progresssCB, completedCB) {
+        let formData = new FormData();
+        for (let i = 0, file; file = files[i]; ++i) {
+            formData.append(file.name, file);
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+
+        xhr.onload = (e) => {
+            if (xhr.status == 200) {
+                //console.log('onload');
+                //console.log(xhr.response);
+                completedCB();
+            }
+        }
+
+        xhr.upload.onprogress = function(e) {
+            console.log('onprogress');
+            if (e.lengthComputable) {
+                let result = {
+                    value: (e.loaded / e.total) * 100
+                }
+                progresssCB(result)
+            }
+        }
+
+        xhr.send(formData);
+    }
 }
 
 XHR.getFunctions = [

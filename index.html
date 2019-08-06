@@ -57,13 +57,21 @@
 
     <br>
     <div class="container-fluid m-0 m-auto">
-        <h3>Upload files</h3>
-        <!-- MULTIPLE FILES -->    
+        <h3>Upload files (Use multipart/form-data)</h3>
+        <!-- MULTIPLE FILES -->
         <form action="/uploadmultiple" enctype="multipart/form-data" method="POST">
             <input type="file" name="myFiles2" multiple>
             <input type="submit" value="Upload your files">
         </form>
         <hr>
+    </div>
+
+    <div class="container-fluid m-0 m-auto">
+        <h3>Upload files (Use XHR)</h3>
+        <!-- MULTIPLE FILES -->
+        <input id="xhrFiles" type="file" name="xhrFiles" multiple>
+        <button onclick="uploadFiles();">Upload file(s)</button>
+        <progress id="progress1" min="0" max="100" value="0">0% complete</progress>
     </div>
 
     <br>
@@ -192,6 +200,32 @@
                     }
                 })
             }
+        }
+
+        let files = [];
+        let xhrFiles = document.getElementById('xhrFiles')
+        xhrFiles.addEventListener('change', (e) => {
+            files = xhrFiles.files;
+        }, false);
+        let progress1 = document.getElementById('progress1')
+
+        let clearFileInput = () => {
+            xhrFiles.type = 'text'
+            xhrFiles.value = '';
+            xhrFiles.type = 'file'
+            progress1.value = 0;
+            progress1.textContent = '0% complete'
+        }
+
+        let uploadFiles = () => {
+            XHR.sendFiles('/uploadmultiple', files, 
+            (progressInfo) => {
+                progress1.value = progressInfo.value;
+                progress1.textContent = progressInfo.value.toString() + '% complete'; // Fallback for unsupported browsers.
+            },
+            () => {
+                clearFileInput();
+            })
         }
     </script>
 

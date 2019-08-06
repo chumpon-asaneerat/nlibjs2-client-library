@@ -137,6 +137,23 @@ app.get("/:file", (req, res, next) => {
 app.post('/uploadmultiple', function (req, res){
     let form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
+
+    // Limits the amount of memory all fields together (except files) can allocate in bytes.
+    // If this value is exceeded, an 'error' event is emitted. The default size is 20MB.
+    form.maxFieldsSize = 20 * 1024 * 1024; // used default.
+
+    // Limits the size of uploaded file. If this value is exceeded, an 'error' event is emitted. 
+    // The default size is 200MB.
+    form.maxFileSize = 1024 * 1024 * 1024; // exntend to 1GB.
+
+    // Limits the number of fields that the querystring parser will decode.
+    // Defaults to 1000 (0 for unlimited).
+    form.maxFields = 1000; // used default.
+
+    // If this option is enabled, when you call form.parse, the files argument will contain 
+    // arrays of files for inputs which submit multiple files using the HTML5 multiple attribute.
+    form.multiples = true;
+
     form.parse(req);
     form.on('progress', (bytesReceived, bytesExpected) => {
         //let percent_complete = (bytesReceived / bytesExpected) * 100;
