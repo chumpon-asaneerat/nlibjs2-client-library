@@ -35,6 +35,13 @@ app.use(favicon(iconpath));
 
 //#endregion
 
+//#region Setup public paths
+
+const publicPath = path.join(__dirname, 'public');
+app.use('/public', express.static(publicPath));
+
+//#endregion
+
 //#region Setup dist path (Third party libraries)
 
 const distPath = path.join(__dirname, 'public', 'dist');
