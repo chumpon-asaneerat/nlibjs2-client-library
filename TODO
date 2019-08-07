@@ -30,6 +30,8 @@ NLib:
             Blob Cache:
                 ☐ Simple cache
                 ☐ Advance cache
+            JWT:
+                ☐ Read server side cookie. (server some implementation).
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
