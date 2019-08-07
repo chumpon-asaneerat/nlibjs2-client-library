@@ -180,7 +180,7 @@ app.post('/uploadmultiple', function (req, res){
 
 //#endregion
 
-//#region get test (json, js, image, audio, video) routes
+//#region get/post test (json, js, image, audio, video) routes
 
 app.get("/getJson", (req, res) => {
     let data = {
@@ -192,6 +192,11 @@ app.get("/getJson", (req, res) => {
 
 app.get("/getJavaScript", (req, res) => {
     res.sendFile(path.join(__dirname, 'server.js'))
+});
+
+app.post("/postJson", (req, res) => {
+    let data = { result: 'success' }
+    sendJson(req, res, data);
 });
 
 //#endregion

@@ -76,6 +76,14 @@
 
     <br>
     <div class="container-fluid m-0 m-auto">
+        <h3>Post Json. postJson</h3>
+        <button onclick="postJson();">Post Json</button>
+        <div id="jsonResult" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container-fluid m-0 m-auto">
         <h3>Ace editor sample (static code).</h3>
         <div id="editor" style="font-size: 1.2em; margin: 10px auto; width: 70%; height: 300px;"></div>
         <hr>
@@ -137,6 +145,8 @@
     <script>
         let jsonEd = ace.edit("jsonEd");
         jsonEd.setTheme("ace/theme/monokai");
+        let jsonResult = ace.edit("jsonResult");
+        jsonResult.setTheme("ace/theme/monokai");
         let getSampleJson = () => {
             XHR.get('/getJson', (data) => {
                 jsonEd.session.setMode("ace/mode/json");
@@ -146,9 +156,22 @@
         }
         let getSampleJavaScript = () => {
             XHR.get('/getJavaScript', (data) => {
-                jsonEd.session.setMode("ace/mode/javascript");
+                jsonEd.session.setMode("ace/mode/javascript");                
                 let src = (data.result) ? data.result : '';
                 jsonEd.session.setValue(src)
+            })
+        }
+        let postJson = () => {
+            let obj = {
+                name: 'joe',
+                age: 45,
+                updated: Date.now()
+            }
+            XHR.postJson('/postJson', obj, (data) => {                
+                jsonResult.session.setMode("ace/mode/json");
+                let src = (data.result) ? data.result : '';
+                
+                jsonResult.session.setValue(src)
             })
         }
         let img = document.getElementById('img1');

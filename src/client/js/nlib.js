@@ -691,7 +691,7 @@ class XHR {
 
         xhr.open("GET", url, true);
         
-        XHR.setReadyHandler(xhr, callback);
+        XHR.setGetReadyHandler(xhr, callback);
         XHR.setTimeoutHandler(xhr, callback);
         XHR.setErrorHandler(xhr, callback);
 
@@ -708,6 +708,18 @@ class XHR {
 
         xhr.send();
     }
+    static postJson(url, data, callback) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        XHR.setPostJsonReadyHandler(xhr, callback);
+        XHR.setTimeoutHandler(xhr, callback);
+        XHR.setErrorHandler(xhr, callback);
+
+        let sJson = JSON.stringify(data);
+        xhr.send(sJson);
+    }
     static sendFiles(url, files, progresssCB, completedCB) {
         let formData = new FormData();
         for (let i = 0, file; file = files[i]; ++i) {
@@ -716,7 +728,7 @@ class XHR {
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', url, true);
-        XHR.setPostLoadHandler(xhr, completedCB);
+        XHR.setPostFilesLoadHandler(xhr, completedCB);
         XHR.setTimeoutHandler(xhr, completedCB);
         XHR.setErrorHandler(xhr, completedCB);
         XHR.setPostProgressHandler(xhr, progresssCB);
@@ -725,33 +737,31 @@ class XHR {
     }
 }
 
-XHR.executeCallback = (xhr, callback) => {    
+XHR.executeCallback = (xhr, callback, value) => {
     if (callback) {
-        let data = { xhr: xhr, result: xhr.responseText }
+        let data = { xhr: xhr, result: value }
         callback(data);
     }
 }
-XHR.setReadyHandler = (xhr, callback) => {
+XHR.setGetReadyHandler = (xhr, callback) => {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            XHR.executeCallback(xhr, callback);
+            XHR.executeCallback(xhr, callback, xhr.responseText);
         }
     }
 }
 XHR.setTimeoutHandler = (xhr, callback) => {
     xhr.ontimeout = () => {
-        console.log('detected timeout!');
         if (callback) {
-            let data = { xhr: xhr, result: null }
+            let data = { xhr: xhr, result: 'timeout' }
             callback(data);
         }
     }
 }
 XHR.setErrorHandler = (xhr, callback) => {
     xhr.onerror = () => {
-        console.log('detected error!');
         if (callback) {
-            let data = { xhr: xhr, result: null }
+            let data = { xhr: xhr, result: 'error' }
             callback(data);
         }
     }
@@ -766,7 +776,16 @@ XHR.setGetLoadHandler = (xhr, callback) => {
         }
     }
 }
-XHR.setPostLoadHandler = (xhr, callback) => {
+
+XHR.setPostJsonReadyHandler = (xhr, callback) => {
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            XHR.executeCallback(xhr, callback, xhr.responseText);
+        }
+    }
+}
+
+XHR.setPostFilesLoadHandler = (xhr, callback) => {
     xhr.onload = (e) => {
         if (xhr.status == 200) {
             //console.log('onload');
