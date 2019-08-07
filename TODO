@@ -23,10 +23,10 @@ NLib:
             ✔ DateTime class @done(19-08-06 23:47)
             ✔ TimeSpan class @done(19-08-06 23:47)
             XMLHttpRequest2:
-                ✔ GET url @done(19-08-06 23:48)
+                ✔ GET url (json, javascript, etc.) @done(19-08-06 23:48)
                 ✔ GET file (blob) @done(19-08-06 23:49)
-                ☐ POST url
-                ☐ POST file(s)
+                ✔ POST json @done(19-08-07 08:04)
+                ✔ POST file(s) @done(19-08-07 08:04)
             Blob Cache:
                 ☐ Simple cache
                 ☐ Advance cache
