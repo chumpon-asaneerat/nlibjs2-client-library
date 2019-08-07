@@ -38,7 +38,8 @@ app.use(favicon(iconpath));
 //#region Setup public paths
 
 const publicPath = path.join(__dirname, 'public');
-const publicMaxAge = { maxage: '30d' };
+//const publicMaxAge = { maxage: '30d' };
+const publicMaxAge = { maxage: '30s' };
 app.use('/public', express.static(publicPath, publicMaxAge));
 
 //#endregion
