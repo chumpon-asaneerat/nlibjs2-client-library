@@ -35,6 +35,23 @@ app.use(favicon(iconpath));
 
 //#endregion
 
+//#region sample middlewares
+/*
+let simplelogger = (req, res, next) => {
+    console.log('LOGGED')
+    next()
+}
+
+let jsonassign = (req, res, next) => {
+    console.log('JSON Assigned')
+    req.document = {
+        value: 'creeate from jsonassign'
+    }
+    next()
+}
+*/
+//#endregion
+
 //#region Setup public paths
 
 const publicPath = path.join(__dirname, 'public');
@@ -200,6 +217,48 @@ app.post("/postJson", (req, res) => {
 });
 
 //#endregion
+
+//#endregion
+
+//#region Test middleware route chain
+
+app.get("/chain", 
+    // loging
+    (req, res, next) => {
+        console.log('1. LOGGED')
+        next()
+    },
+    // assigned json
+    (req, res, next) => {
+        console.log('2. json assigned')
+        req.document = {
+            value: 'creeate from jsonassign'
+        }
+        next()
+    },
+    (req, res, next) => {
+        console.log('3. check condition')
+        if (req.query['status'] === 'true') {
+            console.log('3.1. status OK.')
+            next()
+        }
+        else {
+            console.log('3.2. no status match')
+            //next('route') // skip all routes show 404 error.
+            //res.redirect('/index.html') // redirect.
+            res.status(200).send('no status assigned');
+        }
+    },
+    (req, res, next) => {
+        console.log('4. before end of chain')
+        req.document.value = req.document.value + ' modified by joe'
+        next()
+    },
+    (req, res, next) => {
+        console.log('5. final route')
+        res.status(200).send(`It's work!!! valuee: ${req.document.value}`);
+    }
+);
 
 //#endregion
 
