@@ -35,23 +35,6 @@ app.use(favicon(iconpath));
 
 //#endregion
 
-//#region sample middlewares
-/*
-let simplelogger = (req, res, next) => {
-    console.log('LOGGED')
-    next()
-}
-
-let jsonassign = (req, res, next) => {
-    console.log('JSON Assigned')
-    req.document = {
-        value: 'creeate from jsonassign'
-    }
-    next()
-}
-*/
-//#endregion
-
 //#region Setup public paths
 
 const publicPath = path.join(__dirname, 'public');
