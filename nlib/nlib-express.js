@@ -228,7 +228,18 @@ const WebServer = class {
      * @param {string | RegExp | Array<string | RegExp>} path The path.
      * @param {express.RequestHandler[]} handlers The handlers.
      */
-    all(path, ...handlers) { this.app.all(path, ...handlers); }    
+    all(path, ...handlers) { this.app.all(path, ...handlers); }
+    /**
+     * Send Json.
+     * @param {Request} req The express request instance.
+     * @param {Response} res The express response instance.
+     * @param {Any} data The data to send in json.
+     */
+    sendJson(req, res, data) {
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.write(JSON.stringify(data, null, 4,));
+        res.end();    
+    }
     /**
      * Start the web server to listen request.
      */
