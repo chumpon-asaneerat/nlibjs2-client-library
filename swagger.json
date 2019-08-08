@@ -1,0 +1,71 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Swagger Express Test API",
+        "description": "",
+        "version": "1.0"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "x-swagger-router-controller": "home",
+                "operationId": "xx",
+                "tags": [
+                    "/API Group 1"
+                ],
+                "description": "",
+                "parameters": [],
+                "responses": {}
+            }
+        },
+        "/test": {
+            "post": {
+                "x-swagger-router-controller": "blar",
+                "operationId": "index",
+                "tags": [
+                    "/API Group 1"
+                ],
+                "description": "[Login 123](https://www.google.com)",
+                "parameters": [
+                    {
+                        "name": "test",
+                        "in": "formData",
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "profileId",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "file",
+                        "in": "formData",
+                        "type": "file",
+                        "required": "true"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/bar": {
+            "get": {
+                "x-swagger-router-controller": "bar",
+                "operationId": "impossible",
+                "tags": [
+                    "/API Group 2"
+                ],
+                "description": "",
+                "parameters": [],
+                "responses": {}
+            }
+        }
+    }
+}
