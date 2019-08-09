@@ -25,13 +25,32 @@ const routes = {
 }
 
 const createSessionKey = (req, res, next) => {
-    let name = 'x-device';
-    let cookie = new WebServer.cookie(req, res, name);    
-    let deviceId = cookie.get();
-    if (!deviceId) {
-        deviceId = '12345';
-        cookie.set(deviceId);
+    let expires = WebServer.expires;
+
+    let nname = 'x-device';
+    let ncookie = new WebServer.cookie(req, res, nname);
+    let ndeviceId = ncookie.get();
+    if (!ndeviceId) {
+        ndeviceId = '12345';
+        ncookie.set(ndeviceId, expires.in(15).seconds);
     }
+
+    let sname = 's-device';
+    let scookie = new WebServer.signedCookie(req, res, sname);
+    let sdeviceId = scookie.get();
+    if (!sdeviceId) {
+        sdeviceId = '12345';
+        scookie.set(sdeviceId, expires.in(15).seconds);
+    }
+
+    let sname2 = 's-name';
+    let scookie2 = new WebServer.signedCookie(req, res, sname2);
+    let sdeviceId2 = scookie2.get();
+    if (!sdeviceId2) {
+        sdeviceId2 = '12345';
+        scookie2.set(sdeviceId2, expires.in(15).seconds);
+    }
+
     next();
 }
 

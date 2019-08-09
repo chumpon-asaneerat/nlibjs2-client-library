@@ -19,7 +19,7 @@
             ]
         },
         "cookies": {
-            "secret": "YOUR_SECURE_KEY@123"
+            "secret": "  "
         },
         "favicon": {
             "path": "public",
@@ -177,14 +177,14 @@
                     "maxAge": "15s",
                     "enable": true
                 },
-                { 
-                    "route": "/dist/js", 
+                {
+                    "route": "/dist/js",
                     "path": "/src/client/js",
                     "maxAge": "15s",
                     "enable": true
                 },
-                { 
-                    "route": "/dist/js", 
+                {
+                    "route": "/dist/js",
                     "path": "/src/client/test",
                     "maxAge": "15s",
                     "enable": true
