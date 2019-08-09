@@ -24,10 +24,21 @@ const routes = {
     }
 }
 
-wsvr.get('/', routes.home)
-wsvr.get("/getJson", routes.getJson);
-wsvr.get("/getJavaScript", routes.getJavaScript);
-wsvr.post("/postJson", routes.postJson);
-wsvr.post('/uploadmultiple', WebServer.uploadfiles);
+const createSessionKey = (req, res, next) => {
+    let name = 'x-device';
+    let cookie = new WebServer.cookie(req, res, name);    
+    let deviceId = cookie.get();
+    if (!deviceId) {
+        deviceId = '12345';
+        cookie.set(deviceId);
+    }
+    next();
+}
+
+wsvr.get('/', createSessionKey, routes.home)
+wsvr.get("/getJson", createSessionKey, routes.getJson);
+wsvr.get("/getJavaScript", createSessionKey, routes.getJavaScript);
+wsvr.post("/postJson", createSessionKey, routes.postJson);
+wsvr.post('/uploadmultiple', createSessionKey, WebServer.uploadfiles);
 
 wsvr.listen();
