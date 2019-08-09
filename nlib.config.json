@@ -19,7 +19,7 @@
             ]
         },
         "cookies": {
-            "secret": "  "
+            "secret": "YOUR_SECURE_KEY@123"
         },
         "favicon": {
             "path": "public",

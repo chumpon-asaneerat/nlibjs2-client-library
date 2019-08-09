@@ -307,7 +307,7 @@ class NExpires {
 
     //#endregion
 
-    //#region public methods
+    //#region public properties
 
     /** Gets calculate millisecond of days */
     get days() { return (this.value * 24 * 60 * 60 * 1000); }
