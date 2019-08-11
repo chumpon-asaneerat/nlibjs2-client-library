@@ -379,6 +379,7 @@
         let userStatus = document.getElementById('userStatus')
         let userName = document.getElementById('userName')
         let passWord = document.getElementById('passWord')
+        let currentUser = null;
         
         let userInfo = () => {
             let status = 'status: none';
@@ -400,16 +401,17 @@
             XHR.postJson('/users/signin', user, (data) => {
                 status = status + data.result.message;
                 userStatus.textContent = status;
-                console.log(data.result.user)
+                currentUser = data.result.user;
+                console.log(currentUser)
             })            
         }
         let userSignOut = () => {
             let status = 'status: ';
-            let user = { username: userName.value, password: passWord.value }
-            console.log('input:', user)
-            XHR.postJson('/users/signout', user, (data) => {
+            console.log('input:', currentUser)
+            XHR.postJson('/users/signout', currentUser, (data) => {
                 status = status + data.result.message;
                 userStatus.textContent = status;
+                currentUser = null;
                 console.log(data.result.user)
             })            
         }

@@ -2,6 +2,7 @@ const path = require("path");
 //const nlib = require("./nlib/nlib");
 const WebServer = require('./nlib/nlib-express');
 let wsvr = new WebServer();
+let userSvr = require('./userservice');
 
 const routes = {
     /** @type {WebServer.RequestHandler} */
@@ -24,7 +25,6 @@ const routes = {
     }
 }
 
-let users = [];
 let devices = [];
 
 const userRoutes = {
@@ -32,89 +32,22 @@ const userRoutes = {
     userinfo: (req, res, next) => {},
     /** @type {WebServer.RequestHandler} */
     register: (req, res, next) => {
-        let user = {
-            username: req.body.username,
-            password: req.body.password
-        }
-        let data = { status: '', message: '', user: null }
-        let usernames = users.map((user) => user.username);
-        let idx = usernames.indexOf(user.username);
-        if (idx === -1) {
-            user.signon = false;
-            user.lastaccess = '';
-
-            users.push(user)
-            console.log(users)
-
-            data.status = 'success'
-            data.message = 'new user registered.'
-            data.user = user;
-        }
-        else {
-            data.status = 'failed'
-            data.message = 'user is already registered.'
-        }        
+        let username = req.body.username;
+        let password = req.body.password;
+        let data = userSvr.register(username, password);
         wsvr.sendJson(req, res, data);
     },
     /** @type {WebServer.RequestHandler} */
     signin: (req, res, next) => {
-        let user = {
-            username: req.body.username,
-            password: req.body.password
-        }
-        let data = { status: '', message: '', user: null }
-        let usernames = users.map((user) => user.username);
-        let idx = usernames.indexOf(user.username);
-        if (idx !== -1) {
-            let matchuser = users[idx];
-            matchuser.signon = false;
-            matchuser.lastaccess = '';
-            if (matchuser.password === user.password) {
-                matchuser.signon = true;
-                matchuser.lastaccess = new Date();
-                data.status = 'success'
-                data.message = 'user sign in success.'
-                data.user = matchuser;
-
-                console.log(users)
-            }
-            else {
-                data.status = 'failed'
-                data.message = 'invalid password.'
-                data.user = null;
-            }
-        }
-        else {
-            data.status = 'failed'
-            data.message = 'user not found.'
-            data.user = null;
-        }        
+        let username = req.body.username;
+        let password = req.body.password;
+        let data = userSvr.signIn(username, password);
         wsvr.sendJson(req, res, data);
     },
     /** @type {WebServer.RequestHandler} */
     signout: (req, res, next) => {
-        let data = { status: '', message: '', user: null }
-        let user = {
-            username: req.body.username,
-            password: req.body.password
-        }
-        let usernames = users.map((user) => user.username);
-        let idx = usernames.indexOf(user.username);
-        if (idx !== -1) {
-            let matchuser = users[idx];
-            matchuser.signon = false;
-
-            data.status = 'success'
-            data.message = 'user sign out success.'
-            data.user = matchuser;
-
-            console.log(users)
-        }
-        else {
-            data.status = 'failed'
-            data.message = 'user not found.'
-            data.user = null;
-        }        
+        let tokenId = req.body.tokenId;
+        let data = userSvr.signOut(tokenId);
         wsvr.sendJson(req, res, data);
     }
 }
