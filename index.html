@@ -31,6 +31,16 @@
 
     <br>
     <div class="container-fluid m-0 m-auto">
+        <h3>Test local storate</h3>
+        <input type="text" id="storageData1" value="xxyyzz">
+        <p id="storageView1">data: </p>
+        <button onclick="saveStorage();">Write</button>
+        <button onclick="loadStorage();">Read</button>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container-fluid m-0 m-auto">
         <h3>User Register/Sign In/Sign Out</h3>
         <input type="text" id="userName" value="joe@example.com">
         <input type="text" id="passWord" value="1234">
@@ -437,6 +447,16 @@
         }
 
         deviceInfo();
+
+        let storageData1 = document.getElementById('storageData1')
+        let storageView1 = document.getElementById('storageView1')
+        let saveStorage = () => {            
+            nlib.storage.set('key1', storageData1.value, { TTL: 100000 });
+        }
+        let loadStorage = () => {
+            let data1 = nlib.storage.get('key1')
+            storageView1.textContent = 'data: ' + data1;
+        }
     </script>
 
     <!-- page custom script -->
