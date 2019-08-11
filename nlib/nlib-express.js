@@ -278,7 +278,7 @@ const WebServer = class {
     sendJson(req, res, data) {
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         res.write(JSON.stringify(data, null, 4,));
-        res.end();    
+        res.end();
     }
 
     //#endregion
@@ -575,3 +575,22 @@ module.exports.RequestHandler = exports.RequestHandler = express.RequestHandler;
 module.exports.uploadfiles = exports.uploadfiles = uploadfiles;
 
 //#endregion
+
+/*
+class NJwtService {
+    validateDevice(req, res, next) {
+        let name = `x-device`;
+        let data = ncookie.parse(req, name);
+        if (!data) {
+            let token = uuidv4();
+            ncookie.store(res, name, token);
+        }
+        next();
+    };
+    signin(req, res, next) {
+    };
+    signout(req, res, next) {
+    };
+
+};
+*/

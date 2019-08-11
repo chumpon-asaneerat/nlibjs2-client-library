@@ -31,6 +31,25 @@
 
     <br>
     <div class="container-fluid m-0 m-auto">
+        <h3>User Register/Sign In/Sign Out</h3>
+        <p id="userStatus">Status: </p>
+        <button onclick="userRegister();">Register</button>
+        <button onclick="userSignin();">Sign In</button>
+        <button onclick="userSignout();">Sign Out</button>
+        <hr>
+    </div>
+
+    <div class="container-fluid m-0 m-auto">
+        <h3>Device Register/Sign In/Sign Out</h3>
+        <p id="deviceStatus">Status: </p>
+        <button onclick="deviceRegister();">Register</button>
+        <button onclick="deviceSignin();">Sign In</button>
+        <button onclick="deviceSignout();">Sign Out</button>
+        <hr>
+    </div>
+
+    <br>
+    <div class="container-fluid m-0 m-auto">
         <h3>Load image from static route</h3>
         <br>
         <br>
@@ -207,7 +226,7 @@
         let getSampleJson = () => {
             XHR.get('/getJson', (data) => {
                 jsonEd.session.setMode("ace/mode/json");
-                let src = (data.result) ? data.result : '';
+                let src = (data.result) ? JSON.stringify(data.result, null, 4) : '';
                 jsonEd.session.setValue(src)
             })
         }
@@ -224,9 +243,9 @@
                 age: 45,
                 updated: Date.now()
             }
-            XHR.postJson('/postJson', obj, (data) => {                
+            XHR.postJson('/postJson', obj, (data) => {
                 jsonResult.session.setMode("ace/mode/json");
-                let src = (data.result) ? data.result : '';
+                let src = (data.result) ? JSON.stringify(data.result, null, 4) : '';
                 
                 jsonResult.session.setValue(src)
             })
@@ -354,6 +373,53 @@
                 clearFileInput();
             })
         }
+
+        let userStatus = document.getElementById('userStatus')
+        let userInfo = () => {
+            let status = 'status: none';
+            userStatus.textContent = status;
+        }
+        let userRegister = () => {
+            let status = 'status: ';
+            let user = { username: 'job@example.com', password: '1234' }
+            XHR.postJson('/users/register', user, (data) => {
+                if (data.result.status === 'success') {
+                    status = status + 'success';
+                }
+                else status = status + 'failed';
+                userStatus.textContent = status;
+            })            
+        }
+        let userSignIn = () => {
+            let status = 'status: ';
+            userStatus.textContent = status;
+        }
+        let userSignOut = () => {
+            let status = 'status: ';
+            userStatus.textContent = status;
+        }
+
+        userInfo();
+        
+        let deviceStatus = document.getElementById('deviceStatus')
+        let deviceInfo = () => {
+            let status = 'status: none';
+            deviceStatus.textContent = status;
+        }
+        let deviceRegister = () => {
+            let status = 'status: ';
+            deviceStatus.textContent = status;
+        }
+        let deviceSignIn = () => {
+            let status = 'status: ';
+            deviceStatus.textContent = status;
+        }
+        let deviceSignOut = () => {
+            let status = 'status: ';
+            deviceStatus.textContent = status;
+        }
+
+        deviceInfo();
     </script>
 
     <!-- page custom script -->

@@ -24,6 +24,40 @@ const routes = {
     }
 }
 
+let users = [];
+let devices = [];
+
+const userRoutes = {
+    /** @type {WebServer.RequestHandler} */
+    userinfo: (req, res, next) => {},
+    /** @type {WebServer.RequestHandler} */
+    register: (req, res, next) => {
+        let user = {
+            username: req.body.username,
+            password: req.body.password
+        }
+        let data = { status: 'success' }
+        users.push(user)
+        console.log(users);
+        wsvr.sendJson(req, res, data);
+    },
+    /** @type {WebServer.RequestHandler} */
+    signin: (req, res, next) => {},
+    /** @type {WebServer.RequestHandler} */
+    signout: (req, res, next) => {}
+}
+
+const deviceRoutes = {
+    /** @type {WebServer.RequestHandler} */
+    deviceinfo: (req, res, next) => {},
+    /** @type {WebServer.RequestHandler} */
+    register: (req, res, next) => {},
+    /** @type {WebServer.RequestHandler} */
+    signin: (req, res, next) => {},
+    /** @type {WebServer.RequestHandler} */
+    signout: (req, res, next) => {}
+}
+
 const createSessionKey = (req, res, next) => {
     let expires = WebServer.expires;
 
@@ -59,5 +93,7 @@ wsvr.get("/getJson", createSessionKey, routes.getJson);
 wsvr.get("/getJavaScript", createSessionKey, routes.getJavaScript);
 wsvr.post("/postJson", createSessionKey, routes.postJson);
 wsvr.post('/uploadmultiple', createSessionKey, WebServer.uploadfiles);
+
+wsvr.post("/users/register", userRoutes.register);
 
 wsvr.listen();
