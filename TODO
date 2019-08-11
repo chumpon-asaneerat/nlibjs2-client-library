@@ -19,19 +19,28 @@ NLib:
                 ☐ filter method.
                 ☐ inArray method.
                 ☐ indexOf method.
-            ☐ Local Storage helper class.
             ✔ DateTime class @done(19-08-06 23:47)
             ✔ TimeSpan class @done(19-08-06 23:47)
+            ✔ Local Storage helper class (need refactor). @done(19-08-12 00:59)
             XMLHttpRequest2:
                 ✔ GET url (json, javascript, etc.) @done(19-08-06 23:48)
                 ✔ GET file (blob) @done(19-08-06 23:49)
                 ✔ POST json @done(19-08-07 08:04)
                 ✔ POST file(s) @done(19-08-07 08:04)
+                ✔ Add XHR.minetypes array to handle parse data process. @done(19-08-12 01:00)
+                ✔ Add parseValueByContentType method and update related methods. @done(19-08-12 01:01)
+                ☐ 
             Blob Cache:
                 ☐ Simple cache
                 ☐ Advance cache
             JWT:
                 ☐ Read server side cookie. (server some implementation).
+            NDelegate class:
+                ✔ Ported from exists code. @done(19-08-12 01:03)
+            EventHandler class:
+                ✔ Ported from exists code. @done(19-08-12 01:03)
+            EventArgs class:
+                ✔ Ported from exists code. @done(19-08-12 01:03)
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
