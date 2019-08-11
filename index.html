@@ -32,10 +32,12 @@
     <br>
     <div class="container-fluid m-0 m-auto">
         <h3>User Register/Sign In/Sign Out</h3>
+        <input type="text" id="userName" value="joe@example.com">
+        <input type="text" id="passWord" value="1234">
         <p id="userStatus">Status: </p>
         <button onclick="userRegister();">Register</button>
-        <button onclick="userSignin();">Sign In</button>
-        <button onclick="userSignout();">Sign Out</button>
+        <button onclick="userSignIn();">Sign In</button>
+        <button onclick="userSignOut();">Sign Out</button>
         <hr>
     </div>
 
@@ -43,8 +45,8 @@
         <h3>Device Register/Sign In/Sign Out</h3>
         <p id="deviceStatus">Status: </p>
         <button onclick="deviceRegister();">Register</button>
-        <button onclick="deviceSignin();">Sign In</button>
-        <button onclick="deviceSignout();">Sign Out</button>
+        <button onclick="userSignIn();">Sign In</button>
+        <button onclick="deviceSignOut();">Sign Out</button>
         <hr>
     </div>
 
@@ -375,28 +377,41 @@
         }
 
         let userStatus = document.getElementById('userStatus')
+        let userName = document.getElementById('userName')
+        let passWord = document.getElementById('passWord')
+        
         let userInfo = () => {
             let status = 'status: none';
             userStatus.textContent = status;
         }
         let userRegister = () => {
-            let status = 'status: ';
-            let user = { username: 'job@example.com', password: '1234' }
+            let status = 'status: ';            
+            let user = { username: userName.value, password: passWord.value }
+            console.log('input:', user)
             XHR.postJson('/users/register', user, (data) => {
-                if (data.result.status === 'success') {
-                    status = status + 'success';
-                }
-                else status = status + 'failed';
+                status = status + data.result.message;
                 userStatus.textContent = status;
             })            
         }
         let userSignIn = () => {
             let status = 'status: ';
-            userStatus.textContent = status;
+            let user = { username: userName.value, password: passWord.value }
+            console.log('input:', user)
+            XHR.postJson('/users/signin', user, (data) => {
+                status = status + data.result.message;
+                userStatus.textContent = status;
+                console.log(data.result.user)
+            })            
         }
         let userSignOut = () => {
             let status = 'status: ';
-            userStatus.textContent = status;
+            let user = { username: userName.value, password: passWord.value }
+            console.log('input:', user)
+            XHR.postJson('/users/signout', user, (data) => {
+                status = status + data.result.message;
+                userStatus.textContent = status;
+                console.log(data.result.user)
+            })            
         }
 
         userInfo();

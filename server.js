@@ -36,15 +36,87 @@ const userRoutes = {
             username: req.body.username,
             password: req.body.password
         }
-        let data = { status: 'success' }
-        users.push(user)
-        console.log(users);
+        let data = { status: '', message: '', user: null }
+        let usernames = users.map((user) => user.username);
+        let idx = usernames.indexOf(user.username);
+        if (idx === -1) {
+            user.signon = false;
+            user.lastaccess = '';
+
+            users.push(user)
+            console.log(users)
+
+            data.status = 'success'
+            data.message = 'new user registered.'
+            data.user = user;
+        }
+        else {
+            data.status = 'failed'
+            data.message = 'user is already registered.'
+        }        
         wsvr.sendJson(req, res, data);
     },
     /** @type {WebServer.RequestHandler} */
-    signin: (req, res, next) => {},
+    signin: (req, res, next) => {
+        let user = {
+            username: req.body.username,
+            password: req.body.password
+        }
+        let data = { status: '', message: '', user: null }
+        let usernames = users.map((user) => user.username);
+        let idx = usernames.indexOf(user.username);
+        if (idx !== -1) {
+            let matchuser = users[idx];
+            matchuser.signon = false;
+            matchuser.lastaccess = '';
+            if (matchuser.password === user.password) {
+                matchuser.signon = true;
+                matchuser.lastaccess = new Date();
+                data.status = 'success'
+                data.message = 'user sign in success.'
+                data.user = matchuser;
+
+                console.log(users)
+            }
+            else {
+                data.status = 'failed'
+                data.message = 'invalid password.'
+                data.user = null;
+            }
+        }
+        else {
+            data.status = 'failed'
+            data.message = 'user not found.'
+            data.user = null;
+        }        
+        wsvr.sendJson(req, res, data);
+    },
     /** @type {WebServer.RequestHandler} */
-    signout: (req, res, next) => {}
+    signout: (req, res, next) => {
+        let data = { status: '', message: '', user: null }
+        let user = {
+            username: req.body.username,
+            password: req.body.password
+        }
+        let usernames = users.map((user) => user.username);
+        let idx = usernames.indexOf(user.username);
+        if (idx !== -1) {
+            let matchuser = users[idx];
+            matchuser.signon = false;
+
+            data.status = 'success'
+            data.message = 'user sign out success.'
+            data.user = matchuser;
+
+            console.log(users)
+        }
+        else {
+            data.status = 'failed'
+            data.message = 'user not found.'
+            data.user = null;
+        }        
+        wsvr.sendJson(req, res, data);
+    }
 }
 
 const deviceRoutes = {
@@ -89,11 +161,13 @@ const createSessionKey = (req, res, next) => {
 }
 
 wsvr.get('/', createSessionKey, routes.home)
-wsvr.get("/getJson", createSessionKey, routes.getJson);
-wsvr.get("/getJavaScript", createSessionKey, routes.getJavaScript);
-wsvr.post("/postJson", createSessionKey, routes.postJson);
+wsvr.get('/getJson', createSessionKey, routes.getJson);
+wsvr.get('/getJavaScript', createSessionKey, routes.getJavaScript);
+wsvr.post('/postJson', createSessionKey, routes.postJson);
 wsvr.post('/uploadmultiple', createSessionKey, WebServer.uploadfiles);
 
-wsvr.post("/users/register", userRoutes.register);
+wsvr.post('/users/register', userRoutes.register);
+wsvr.post('/users/signin', userRoutes.signin);
+wsvr.post('/users/signout', userRoutes.signout);
 
 wsvr.listen();
