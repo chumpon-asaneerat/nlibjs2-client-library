@@ -34,8 +34,11 @@ const userRoutes = {
     register: (req, res, next) => {
         let username = req.body.username;
         let password = req.body.password;
-        let data = userSvr.register(username, password);
-        wsvr.sendJson(req, res, data);
+        // simulate call async function for execute sql server stored procedure.
+        (async() => {
+            let data = await userSvr.registerAsync(username, password);
+            wsvr.sendJson(req, res, data);
+        })();
     },
     /** @type {WebServer.RequestHandler} */
     signin: (req, res, next) => {

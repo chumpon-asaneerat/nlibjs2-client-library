@@ -46,6 +46,16 @@ const register = (name, pwd) => {
     }
     return ret;
 }
+
+const registerAsync = async (name, pwd) => {
+    return new Promise(resolve => {
+        setTimeout(() => { 
+            let ret = register(name, pwd);
+            resolve(ret)
+        }, 2000)
+    });
+}
+
 const signIn = (name, pwd) => {
     let ret = { status: '', message: '', user: null };
     let user = getUser(indexByName(name));
@@ -95,6 +105,7 @@ const getUsers = () => { return users; }
 
 module.exports = exports = {
     register: register,
+    registerAsync: registerAsync,
     signIn: signIn,
     signOut: signOut,
     getUsers: getUsers
