@@ -1,0 +1,44 @@
+{
+    "GetRandomHexCode": {
+        "type": "PROCEDURE",
+        "updated": "2018-05-22T05:08:28.910Z",
+        "parameter": {
+            "inputs": [
+                {
+                    "name": "length",
+                    "type": "int",
+                    "default": "6"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "RandomString",
+                    "type": "nvarchar(20)",
+                    "default": "null"
+                }
+            ]
+        }
+    },
+    "GetErrorMsg": {
+        "type": "PROCEDURE",
+        "updated": "2018-05-22T05:33:13.943Z",
+        "parameter": {
+            "inputs": [
+                {
+                    "name": "errCode",
+                    "type": "int"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "errNum",
+                    "type": "int"
+                },
+                {
+                    "name": "errMsg",
+                    "type": "nvarchar(max)"
+                }
+            ]
+        }
+    }
+}

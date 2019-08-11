@@ -3,6 +3,10 @@
 const nlib = require('./nlib');
 const path = require('path');
 const fs = require('fs');
+const dot = require('dot');
+dot.templateSettings.strip = false; // preserve space.
+
+const beautify = require('js-beautify').js
 
 //#region Internal variable and methods
 
@@ -221,7 +225,6 @@ const mssqlCfg = {
     }
 }
 const check_config = (name = 'default') => {
-    let dbCfg;
     let cfg = nlib.Config;
     if (!cfg.exists()) {
         cfg.set('mssql', mssqlCfg);
@@ -794,6 +797,49 @@ const SqlServer = class {
      * Gets SqlServer class version.
      */
     static get version() { return "2.0.0"; }
+
+    static getSchemaConfigFileName(name = 'default', outPath = 'schema') {
+        let cfg = check_config(name);
+        let dbName = (cfg) ? cfg.database : name; // get database name.
+        let pathName = path.join(nlib.paths.root, outPath);
+        checkDir(pathName);
+        let file = path.join(pathName, dbName + '.schema.config.json');
+        return file;
+    }
+    static getSchemaFileName(name = 'default', outPath = 'schema') {
+        let cfg = check_config(name);
+        let dbName = (cfg) ? cfg.database : name; // get database name.
+        let pathName = path.join(nlib.paths.root, outPath);
+        checkDir(pathName);
+        let file = path.join(pathName, dbName + '.schema.json');
+        return file;
+    }
+    static getSchemaConfig(name = 'default', outPath = 'schema') {
+        let file = SqlServer.getSchemaConfigFileName(name, outPath);
+        let ret;
+        if (fs.existsSync(file)) ret = require(file);
+        if (!ret) ret = {}
+        return ret;
+    }
+    static async generateSchemaConfig(name = 'default', outPath = 'schema') {
+        let file = SqlServer.getSchemaConfigFileName(name, outPath);
+        let sqldb = new SqlServer();
+        await sqldb.connect(name);
+        if (sqldb.connected) {
+            let dbRet;
+            let ret = SqlServer.getSchemaConfig(name, outPath);
+            dbRet = await sqldb.query(queries.getProcedures());
+            let procs = dbRet.data;
+            let procCnt = procs.length;
+            for (let i = 0; i < procCnt; i++) {
+                let sp = procs[i];
+                if (!ret[sp.name]) ret[sp.name] = false            
+            }
+            // write file.
+            fs.writeFileSync(file, JSON.stringify(ret, null, 4), 'utf8', )
+        }
+        await sqldb.disconnect();
+    }
     /**
      * Generate database schema file.
      * 
@@ -803,37 +849,82 @@ const SqlServer = class {
     static async generateSchema(name = 'default', outPath = 'schema') {
         let sqldb = new SqlServer();
         await sqldb.connect(name);
-        let dbRet;
-        let ret = {};
-        dbRet = await sqldb.query(queries.getProcedures());
-        let procs = dbRet.data;
-        let procCnt = procs.length;
-        for (let i = 0; i < procCnt; i++) {
-            let sp = procs[i];
-            ret[sp.name] = {
-                //name: sp.name,
-                type: sp.type,
-                //created: sp.created,
-                updated: sp.updated
-            }
-            let defaultValue = defaultvalues.parse(sp);
+        if (sqldb.connected) {
+            let dbRet;
+            let schemaCfg = SqlServer.getSchemaConfig(name, outPath);
+            let ret = {};
+            dbRet = await sqldb.query(queries.getProcedures());
+            let procs = dbRet.data;
+            let procCnt = procs.length;
+            for (let i = 0; i < procCnt; i++) {
+                let sp = procs[i];
+                if (!schemaCfg[sp.name]) continue; // skip generate.                
+                ret[sp.name] = {
+                    type: sp.type,
+                    //created: sp.created,
+                    updated: sp.updated
+                }
+                let defaultValue = defaultvalues.parse(sp);
 
-            dbRet = await sqldb.query(queries.getProcedureParameters(sp.name));
-            let param = dbRet.data;
-            ret[sp.name].parameter = (param) ? 
-                await queries.parseParameters(param, defaultValue) : 
-                { inputs:[], output: [] };
+                dbRet = await sqldb.query(queries.getProcedureParameters(sp.name));
+                let param = dbRet.data;
+                ret[sp.name].parameter = (param) ? 
+                    await queries.parseParameters(param, defaultValue) : 
+                    { inputs:[], output: [] };
+            }
+            // write file.
+            let file = SqlServer.getSchemaFileName(name, outPath);
+            fs.writeFileSync(file, JSON.stringify(ret, null, 4), 'utf8', )
+        }
+        await sqldb.disconnect();
+    }
+
+    static async generateSchemaJavascriptFile(name = 'default', outPath = 'schema') {
+        let cfg = nlib.Config;
+        let file = SqlServer.getSchemaFileName(name, outPath);
+        let schema = require(file);        
+        let db = {
+            name: name,
+            databaseName: cfg.get('mssql.' + name + ".database"),
+            procedures: []
         }
 
-        await sqldb.disconnect();
+        for (let key in schema) {
+            db.procedures.push({
+                name: key,
+                parameter: schema[key].parameter
+            })
+        }
+        
+        let tmpl = `
+        // required to manual set require path for nlib-mssql.
+        const SqlServer = require('./nlib/nlib-mssql');
+        const schema = require('./schema/{{=it.databaseName}}.schema.json');
 
-        // write file.
-        let cfg = check_config(name);
-        let dbName = (cfg) ? cfg.database : name; // get database name.
-        let pathName = path.join(nlib.paths.root, outPath);
-        checkDir(pathName);
-        let file = path.join(pathName, dbName + '.schema.json');        
-        fs.writeFileSync(file, JSON.stringify(ret, null, 4), 'utf8', )
+        const {{=it.databaseName}} = class extends SqlServer {
+            constructor() {
+                super();
+                // should match with nlib.config.json
+                this.database = '{{=it.name}}'
+            }
+            async connect() { return await super.connect(this.database); }
+            async disconnect() { await super.disconnect(); }
+            {{~it.procedures :value:index}}
+            async {{=value.name}}(pObj) {
+                let name = '{{=value.name}}';
+                let proc = schema[name];
+                return await this.execute(name, pObj, proc.parameter.inputs, proc.parameter.outputs);
+            }
+            {{~}}
+        }
+
+        module.exports = exports = {{=it.databaseName}};
+        `;
+        let tmplFn = dot.template(tmpl.toString());
+        let compileTmpl = tmplFn(db);
+        let jsText = beautify(compileTmpl, { indent_size: 4, space_in_empty_paren: true });
+        let jsFile = path.join(nlib.paths.root, db.databaseName + '.db.js');
+        fs.writeFileSync(jsFile, jsText + '\n');
     }
 
     //#endregion

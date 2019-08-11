@@ -191,5 +191,29 @@
                 }
             ]
         }
+    },
+    "mssql": {
+        "default": {
+            "server": "localhost",
+            "database": "TestDb7x3",
+            "user": "sa",
+            "password": "winnt123",
+            "pool": {
+                "max": 10,
+                "min": 0,
+                "timeout": 1000
+            }
+        },
+        "testdb7x3": {
+            "server": "localhost",
+            "database": "Testdb7x3",
+            "user": "sa",
+            "password": "winnt123",
+            "pool": {
+                "max": 10,
+                "min": 0,
+                "timeout": 1000
+            }
+        }
     }
 }

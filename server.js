@@ -1,8 +1,12 @@
 const path = require("path");
 //const nlib = require("./nlib/nlib");
 const WebServer = require('./nlib/nlib-express');
-let wsvr = new WebServer();
-let userSvr = require('./userservice');
+
+const wsvr = new WebServer();
+const userSvr = require('./userservice');
+
+const TestDb7x3 = require('./TestDb7x3.db');
+const db = new TestDb7x3();
 
 const routes = {
     /** @type {WebServer.RequestHandler} */
@@ -22,7 +26,22 @@ const routes = {
     postJson: (req, res, next) => {
         let data = { result: 'success' }
         wsvr.sendJson(req, res, data);
+    },
+     /** @type {WebServer.RequestHandler} */
+    randomCode: (req, res, next) => {
+        (async() => {
+            let connected = await db.connect();
+            if (connected) {
+                let data = await db.GetRandomHexCode({ length: 3 });
+                await db.disconnect();
+                wsvr.sendJson(req, res, data);
+            }
+            else {
+                wsvr.sendJson(req, res, { error: 'cannot connect to database server.' });
+            }
+        })()
     }
+
 }
 
 let devices = [];
@@ -98,6 +117,7 @@ const createSessionKey = (req, res, next) => {
 
 wsvr.get('/', createSessionKey, routes.home)
 wsvr.get('/getJson', createSessionKey, routes.getJson);
+wsvr.get('/randomcode', createSessionKey, routes.randomCode);
 wsvr.get('/getJavaScript', createSessionKey, routes.getJavaScript);
 wsvr.post('/postJson', createSessionKey, routes.postJson);
 wsvr.post('/uploadmultiple', createSessionKey, WebServer.uploadfiles);
