@@ -21,22 +21,22 @@ let checkSecure2 = (req, res, next) => {
 const routes = {
     /** @type {WebServer.RequestHandler} */
     home: (req, res, next) => {
-        wsvr.sendFile(req, res, 'index.html');
+        WebServer.sendFile(req, res, 'index.html');
     },
     /** @type {WebServer.RequestHandler} */
     api1: (req, res, next) => {
         let data = { message: 'The api 1' }
-        wsvr.sendJson(req, res, data);
+        WebServer.sendJson(req, res, data);
     },
     /** @type {WebServer.RequestHandler} */
     api2: (req, res, next) => {
         let data = { message: 'The api 2 (secure)' }
-        wsvr.sendJson(req, res, data);
+        WebServer.sendJson(req, res, data);
     },
     /** @type {WebServer.RequestHandler} */
     api3: (req, res, next) => {
         let data = { message: 'The api 3 (secure)' }
-        wsvr.sendJson(req, res, data);
+        WebServer.sendJson(req, res, data);
     }
 }
 
