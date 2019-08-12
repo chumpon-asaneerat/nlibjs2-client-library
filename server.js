@@ -5,9 +5,6 @@ const WebRouter = WebServer.WebRouter;
 
 const wsvr = new WebServer();
 
-//const express = require('express');
-//const commonRoute = express.Router();
-//const secureRoute = express.Router();
 const commonRoute = new WebRouter();
 const secureRoute = new WebRouter();
 
@@ -50,7 +47,7 @@ secureRoute.get('/api2', routes.api2) // default secure
 secureRoute.get('/api3', checkSecure2, routes.api3) // default secure and custom secure
 
 wsvr.get('/', routes.home)
-// setup Router(s).
+// setup router(s).
 wsvr.route('/api', commonRoute);
 wsvr.route('/api', secureRoute);
 
