@@ -1,4 +1,4 @@
-const WebServer = require('./../nlib/nlib-express');
+const WebServer = require('./../../../nlib/nlib-express');
 const WebRouter = WebServer.WebRouter;
 
 const router = new WebRouter();
@@ -18,4 +18,13 @@ const routes = class {
 
 router.get('/api1', routes.api1)
 
-module.exports = exports = function(svr) { svr.route('/api', router) };
+/**
+ * Init routes.
+ * 
+ * @param {express} svr 
+ */
+function init_routes(svr) {
+    svr.route('/api', router);
+};
+
+module.exports.init_routes = exports.init_routes = init_routes;

@@ -1,6 +1,5 @@
-const WebServer = require('./../nlib/nlib-express');
+const WebServer = require('./../../../nlib/nlib-express');
 const WebRouter = WebServer.WebRouter;
-
 const router = new WebRouter();
 
 const checkSecure = (req, res, next) => {
@@ -40,4 +39,13 @@ router.use(checkSecure);
 router.get('/api2', routes.api2)
 router.get('/api3', checkSecure2, routes.api3)
 
-module.exports = exports = function(svr) { svr.route('/api', router) };
+/**
+ * Init routes.
+ * 
+ * @param {express} app 
+ */
+function init_routes(svr) {
+    svr.route('/api', router);
+};
+
+module.exports.init_routes = exports.init_routes = init_routes;
