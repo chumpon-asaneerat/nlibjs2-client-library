@@ -1,16 +1,21 @@
-const WebServer = require('./../../../nlib/nlib-express');
+//#region common requires
+
+const path = require('path');
+const rootPath = process.env['ROOT_PATHS'];
+const nlibPath = path.join(rootPath, 'nlib');
+//const nlibjs = path.join(nlibPath, 'nlib');
+const nlibExprjs = path.join(nlibPath, 'nlib-express');
+
+const WebServer = require(nlibExprjs);
+
+//#endregion
+
+//#region router type and variables
+
 const WebRouter = WebServer.WebRouter;
 const router = new WebRouter();
 
-const checkSecure = (req, res, next) => {
-    console.log('secure checked.');
-    next();
-}
-
-const checkSecure2 = (req, res, next) => {
-    console.log('secure level 2 checked.');
-    next();
-}
+//#endregion
 
 const routes = class {
     /**
@@ -35,16 +40,21 @@ const routes = class {
     }
 }
 
+const checkSecure = (req, res, next) => {
+    console.log('secure checked.');
+    next();
+}
+
+const checkSecure2 = (req, res, next) => {
+    console.log('secure level 2 checked.');
+    next();
+}
+
 router.use(checkSecure);
 router.get('/api2', routes.api2)
 router.get('/api3', checkSecure2, routes.api3)
 
-/**
- * Init routes.
- * 
- * @param {express} app 
- */
-function init_routes(svr) {
+const init_routes = (svr) => {
     svr.route('/api', router);
 };
 

@@ -1,6 +1,21 @@
-const WebServer = require('./../../../../nlib/nlib-express');
+//#region common requires
+
+const path = require('path');
+const rootPath = process.env['ROOT_PATHS'];
+const nlibPath = path.join(rootPath, 'nlib');
+//const nlibjs = path.join(nlibPath, 'nlib');
+const nlibExprjs = path.join(nlibPath, 'nlib-express');
+
+const WebServer = require(nlibExprjs);
+
+//#endregion
+
+//#region router type and variables
+
 const WebRouter = WebServer.WebRouter;
 const router = new WebRouter();
+
+//#endregion
 
 const routes = class {
     /**
@@ -16,12 +31,7 @@ const routes = class {
 
 router.get('/', routes.home)
 
-/**
- * Init routes.
- * 
- * @param {express} app 
- */
-function init_routes(svr) {
+const init_routes = (svr) => {
     svr.route('/', router);
 };
 
