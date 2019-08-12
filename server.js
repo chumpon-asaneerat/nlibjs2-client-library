@@ -1,12 +1,15 @@
 const path = require("path");
 const nlib = require("./nlib/nlib");
 const WebServer = require('./nlib/nlib-express');
+const WebRouter = WebServer.WebRouter;
 
 const wsvr = new WebServer();
 
-const express = require('express');
-const commonRoute = express.Router();
-const secureRoute = express.Router();
+//const express = require('express');
+//const commonRoute = express.Router();
+//const secureRoute = express.Router();
+const commonRoute = new WebRouter();
+const secureRoute = new WebRouter();
 
 let checkSecure = (req, res, next) => {
     console.log('secure checked.');
@@ -49,7 +52,7 @@ secureRoute.get('/api3', checkSecure2, routes.api3) // default secure and custom
 
 wsvr.get('/', routes.home)
 // setup Router(s).
-wsvr.app.use('/api', commonRoute);
-wsvr.app.use('/api', secureRoute);
+wsvr.app.use('/api', commonRoute.router);
+wsvr.app.use('/api', secureRoute.router);
 
 wsvr.listen();
