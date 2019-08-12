@@ -268,6 +268,13 @@ const WebServer = class {
      * @param {express.RequestHandler[]} handlers The handlers.
      */
     all(path, ...handlers) { this.app.all(path, ...handlers); }
+    /**
+     * Add WebRouter.
+     * 
+     * @param {String} path The WebRouter root path.
+     * @param {WebRouter} webrouter The WebRouter instance.
+     */
+    route(path ,webrouter) { this.app.use(path, webrouter.router); }
 
     //#endregion
 
