@@ -24,8 +24,7 @@ let checkSecure2 = (req, res, next) => {
 const routes = {
     /** @type {WebServer.RequestHandler} */
     home: (req, res, next) => {
-        let file = path.join(nlib.paths.root, 'index.html')
-        res.sendFile(file);
+        wsvr.sendFile(req, res, 'index.html');
     },
     /** @type {WebServer.RequestHandler} */
     api1: (req, res, next) => {
