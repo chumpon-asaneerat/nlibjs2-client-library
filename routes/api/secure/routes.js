@@ -2,7 +2,12 @@
 
 const path = require('path');
 const rootPath = process.env['ROOT_PATHS'];
+
+// for production
 const nlibPath = path.join(rootPath, 'nlib');
+// for nlib-server dev project
+//const nlibPath = path.join(rootPath, 'src', 'server', 'js', 'nlib');
+
 //const nlibjs = path.join(nlibPath, 'nlib');
 const nlibExprjs = path.join(nlibPath, 'nlib-express');
 
