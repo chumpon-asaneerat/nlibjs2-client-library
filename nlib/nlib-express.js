@@ -199,7 +199,7 @@ const init_middlewares = (app, io, cfg) => {
     init_public_paths(app, cfg);
     init_swagger_doc(app, cfg);
 };
-const init_route = (svr, parentPath) => {
+const init_routes_js = (svr, parentPath) => {
     find.fileSync(parentPath).forEach(file => {
         if (path.basename(file).toLowerCase() === 'routes.js') {
             try {
@@ -221,7 +221,7 @@ const init_route = (svr, parentPath) => {
  */
 const init_routes = (svr) => {
     let routePath = nlib.paths.routes;
-    init_route_js(svr, routePath);
+    init_routes_js(svr, routePath);
 }
 
 //#endregion
