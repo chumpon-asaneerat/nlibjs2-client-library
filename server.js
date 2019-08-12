@@ -52,7 +52,7 @@ secureRoute.get('/api3', checkSecure2, routes.api3) // default secure and custom
 
 wsvr.get('/', routes.home)
 // setup Router(s).
-wsvr.app.use('/api', commonRoute.router);
-wsvr.app.use('/api', secureRoute.router);
+wsvr.route('/api', commonRoute);
+wsvr.route('/api', secureRoute);
 
 wsvr.listen();
