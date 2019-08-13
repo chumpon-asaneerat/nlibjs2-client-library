@@ -28,9 +28,8 @@ const routes = class {
      * api1
      * @param {Request} req The Request.
      * @param {Response} res The Response.
-     * @param {RequestHandler} next The RequestHandler.
      */
-    static api1(req, res, next) {
+    static api1(req, res) {
         let data = { message: 'The api 1' }
         WebServer.sendJson(req, res, data);
     }

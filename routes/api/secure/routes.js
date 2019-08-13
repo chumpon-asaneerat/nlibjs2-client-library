@@ -28,9 +28,8 @@ const routes = class {
      * api2
      * @param {Request} req The Request.
      * @param {Response} res The Response.
-     * @param {WebServer.RequestHandler} next The RequestHandler.
      */
-    static api2(req, res, next) {
+    static api2(req, res) {
         let data = { message: 'The api 2 (secure)' }
         WebServer.sendJson(req, res, data);
     }
@@ -38,9 +37,8 @@ const routes = class {
      * api3
      * @param {Request} req The Request.
      * @param {Response} res The Response.
-     * @param {WebServer.RequestHandler} next The RequestHandler.
      */
-    static api3(req, res, next) {
+    static api3(req, res) {
         let data = { message: 'The api 3 (super secure)' }
         WebServer.sendJson(req, res, data);
     }
