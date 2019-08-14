@@ -178,8 +178,8 @@
                     "enable": true
                 },
                 {
-                    "route": "/dist/js",
-                    "path": "src/client/js",
+                    "route": "/dist",
+                    "path": "src/client",
                     "maxAge": "15s",
                     "enable": true
                 }
