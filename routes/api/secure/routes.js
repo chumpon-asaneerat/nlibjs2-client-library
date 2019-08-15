@@ -31,7 +31,8 @@ const routes = class {
      */
     static api2(req, res) {
         let data = { message: 'The api 2 (secure)' }
-        WebServer.sendJson(req, res, data);
+        let ret = nlib.NResult.data(data);
+        WebServer.sendJson(req, res, ret);
     }
     /**
      * api3
@@ -40,7 +41,8 @@ const routes = class {
      */
     static api3(req, res) {
         let data = { message: 'The api 3 (super secure)' }
-        WebServer.sendJson(req, res, data);
+        let ret = nlib.NResult.data(data);
+        WebServer.sendJson(req, res, ret);
     }
 }
 

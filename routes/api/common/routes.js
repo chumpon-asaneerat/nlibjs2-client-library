@@ -31,7 +31,8 @@ const routes = class {
      */
     static api1(req, res) {
         let data = { message: 'The api 1' }
-        WebServer.sendJson(req, res, data);
+        let ret = nlib.NResult.data(data);
+        WebServer.sendJson(req, res, ret);
     }
 }
 
