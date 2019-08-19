@@ -32,6 +32,12 @@ const routes = class {
     static api2(req, res) {
         let data = { message: 'The api 2 (secure)' }
         let ret = nlib.NResult.data(data);
+        let obj = {
+            val1: 1,
+            val2: new Date().toString()
+        }
+        WebServer.signedCookie.writeObject(req, res, obj);
+        //WebServer.cookie.writeObject(req, res, obj);
         WebServer.sendJson(req, res, ret);
     }
     /**
@@ -41,6 +47,8 @@ const routes = class {
      */
     static api3(req, res) {
         let data = { message: 'The api 3 (super secure)' }
+        let obj = WebServer.signedCookie.readObject(req, res);
+        data.obj = obj;
         let ret = nlib.NResult.data(data);
         WebServer.sendJson(req, res, ret);
     }
