@@ -30,13 +30,15 @@ const routes = class {
      * @param {Response} res The Response.
      */
     static api1(req, res) {
-        let data = { message: 'The api 1' }
+        let rreq = WebServer.parseReq(req);
+        //let data = { message: 'The api 1' }
+        let data = rreq.data;
         let ret = nlib.NResult.data(data);
         WebServer.sendJson(req, res, ret);
     }
 }
 
-router.get('/api1', routes.api1)
+router.all('/api1', routes.api1)
 
 const init_routes = (svr) => {
     svr.route('/api', router);
