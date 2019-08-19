@@ -36,7 +36,8 @@ const routes = class {
             val1: 1,
             val2: new Date().toString()
         }
-        WebServer.signedCookie.writeObject(req, res, obj);
+        WebServer.signedCookie.writeObject(req, res, obj, WebServer.expires.in(5).years);
+        //WebServer.signedCookie.writeObject(req, res, obj, WebServer.expires.in(1).months);
         //WebServer.cookie.writeObject(req, res, obj);
         WebServer.sendJson(req, res, ret);
     }
