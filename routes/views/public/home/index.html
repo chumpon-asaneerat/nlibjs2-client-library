@@ -21,10 +21,27 @@
     <!-- Flag and Emoji icons -->
     <link href="/dist/css/flag-icon.min.css" rel="stylesheet" type="text/css" />
     <link href="/dist/css/emojisymbol.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        #dom1 {
+            margin: 0 auto;
+            width: 100px;
+            height: 100px;
+        }
+        #dom1[showred=true] {
+            color: white;
+            background-color: red;
+        }
+        .blackpen {
+            color:black;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid m-0 m-auto">
         <h4>Home page.</h4>
+        <div id="dom1">
+            <p>sample data.</p>
+        </div>
     </div>
 
     <!-- JQuery -->
@@ -45,6 +62,12 @@
     -->
     <!-- nlib -->
     <script src="dist/js/nlib.js"></script>
+    <!-- nlib test scripts -->
+    <!--
+    <script src="dist/test/timespan.js"></script>
+    <script src="dist/test/datetime.js"></script>
+    -->
+    <script src="dist/test/ndom.js"></script>
 
     <script>
     </script>
