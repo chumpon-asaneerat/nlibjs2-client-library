@@ -41,6 +41,8 @@ NLib:
                 ✔ Ported from exists code. @done(19-08-12 01:03)
             EventArgs class:
                 ✔ Ported from exists code. @done(19-08-12 01:03)
+            NDocument:
+                ✔ Add dynamic load css/js file(s). @done(20-04-29 19:37)
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
