@@ -42,10 +42,10 @@ NLib:
             EventArgs class:
                 ✔ Ported from exists code. @done(19-08-12 01:03)
             NRuntime:
-                ✔ Add NRuntime class. @done(20-04-29 21:29)
-                ✔ Add NRuntime.File class. @done(20-04-29 21:29)
-                ✔ Add NRuntime.File.css class. @done(20-04-29 21:30)
-                ✔ Add NRuntime.File.js class. @done(20-04-29 21:30)
+                ✔ Add NRuntime class. @done(20-04-29 23:10)
+                ✔ Add NRuntime.File class. @done(20-04-29 23:10)
+                ✔ Add NRuntime.File.css class. @done(20-04-29 23:10)
+                ✔ Add NRuntime.File.js class. @done(20-04-29 23:10)
         Rechecks:
             ☐ web.tech.nodes (AutoFill 5)
             ☐ web.tech.nodes (Scaling 2 and 3)
