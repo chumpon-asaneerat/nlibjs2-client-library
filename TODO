@@ -10,6 +10,7 @@ NLib:
                 ✔ repeat method. @done(19-07-23 18:36)
                 ✔ padL method. @done(19-07-23 18:36)
                 ✔ padR method. @done(19-07-23 18:36)
+                ☐ Move some utils method(s) to string extension method(s).
             Date Extension Methods:
                 ✔ format method. @done(19-07-23 18:36)
             NArray class:
