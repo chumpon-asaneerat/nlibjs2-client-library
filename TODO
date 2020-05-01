@@ -10,7 +10,8 @@ NLib:
                 ✔ repeat method. @done(19-07-23 18:36)
                 ✔ padL method. @done(19-07-23 18:36)
                 ✔ padR method. @done(19-07-23 18:36)
-                ☐ Move some utils method(s) to string extension method(s).
+                ✔ Move hasWhiteSpace method from utils to string extension method. @done(20-05-02 00:00)
+                ✔ Move isValidEmail method from utils to string extension method. @done(20-05-02 00:00)
             Date Extension Methods:
                 ✔ format method. @done(19-07-23 18:36)
             NArray class:
